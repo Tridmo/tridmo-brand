@@ -72,6 +72,6 @@ const get_brands_stats = createSlice({
 });
 
 export const reducer = get_brands_stats.reducer;
-export const selectBrandsStats = (state: any) => state?.get_brands_stats?.data[0]?.data
+export const selectBrandsStats = (state: any) => state?.get_brands_stats?.data?.[0]?.data
 export const selectBrandsStatsStatus = (state: any) => state?.get_brands_stats?.status
 export default get_brands_stats;

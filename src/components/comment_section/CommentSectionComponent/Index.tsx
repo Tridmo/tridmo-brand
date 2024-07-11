@@ -9,7 +9,7 @@ import NoComments from './NoComments'
 import { CommentsContext } from '@/context/comments'
 import { useSelector } from 'react-redux'
 import { selectMyProfile } from '../../../data/me'
-import { IMAGES_BASE_URL } from '../../../utils/image_src'
+import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import { Box } from '@mui/system'
 import { Divider } from '@mui/material'
 

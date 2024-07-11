@@ -20,6 +20,8 @@ import { months } from '../../../../types/variables';
 import { useSelector } from '../../../../store';
 import { useDispatch } from 'react-redux';
 import { getDownloadsStats, selectDownloadsStats, selectDownloadsStatsStatus } from '../../../../data/statistics/get_downloads_stats';
+import { selectMyProfile } from '../../../../data/me';
+import { lineChartOptions } from '../../../../types/charts.config';
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +39,7 @@ export default function DownloadsChartComponent() {
   const dispatch = useDispatch<any>()
   const dataStatus = useSelector(selectDownloadsStatsStatus)
   const data = useSelector(selectDownloadsStats)
+  const profile = useSelector(selectMyProfile)
 
   const [isMonthly, setIsMonthly] = useState<boolean>(true)
   const [selectedYear, setSelectedYear] = useState<any>(new Date().getFullYear())
@@ -44,17 +47,12 @@ export default function DownloadsChartComponent() {
 
   function handleMonthSelect(month) {
     setSelectedMonth(month)
-    dispatch(getDownloadsStats({ year: selectedYear, month }))
+    dispatch(getDownloadsStats({ year: selectedYear, month, brand_id: profile?.brand?.id }))
   }
   function handleYearSelect(year) {
     setSelectedYear(year)
-    dispatch(getDownloadsStats({ year, month: selectedMonth }))
+    dispatch(getDownloadsStats({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
   }
-
-  const options = {
-    scales: { y: { ticks: { stepSize: 1 } } },
-    maintainAspectRatio: false,
-  };
 
   return (
     <Box
@@ -118,20 +116,20 @@ export default function DownloadsChartComponent() {
                       {
                         label: 'Ежемесячная загрузки',
                         data: data?.chart_data?.monthly_downloads,
-                        borderColor: 'rgba(0, 204, 102, 1)',
-                        backgroundColor: 'rgba(102, 255, 153, 0.2)',
+                        borderColor: 'rgba(42, 157, 144, 1)',
+                        backgroundColor: 'rgba(42, 157, 144, 0.4)',
                         fill: true,
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />
                 :
                 <Line
                   data={{
-                    labels: Array.from({ length: data?.chart_data?.daily_downloads.length }, (_, i) => i + 1), // Days 1 to 30
+                    labels: Array.from({ length: data?.chart_data?.daily_downloads?.length }, (_, i) => i + 1), // Days 1 to 30
                     datasets: [
                       {
                         label: 'Ежедневные загрузки',
@@ -142,7 +140,7 @@ export default function DownloadsChartComponent() {
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />

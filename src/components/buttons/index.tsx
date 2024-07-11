@@ -153,15 +153,14 @@ const ButtonWrapper = styled(Button)(
 
       &.MuiButton-login__btn {
         height:40px;
-        border: 1.7px solid ${theme.colors.gray[900]};
         color:white;
         background-color: ${theme.colors.gray[900]};
         padding:0 20px ;
         border-radius:4px;
         
         &:hover{
-          background-color:${theme.colors.gray[700]};
-          border-color: ${theme.colors.gray[700]};
+          background-color:${theme.colors.gray[500]};
+          border-color: ${theme.colors.gray[500]};
           
         }   
 

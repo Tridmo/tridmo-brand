@@ -38,5 +38,5 @@ const get_render_platforms = createSlice({
 });
 
 export const reducer = get_render_platforms.reducer;
-export const selectRenderPlatforms = (state: any) => state?.get_render_platforms?.data[0]?.data
+export const selectRenderPlatforms = (state: any) => state?.get_render_platforms?.data?.[0]?.data
 export default get_render_platforms;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Grid, List, styled, ListItem, Box } from '@mui/material';
+import { Grid, List, styled, ListItem, Box, SxProps } from '@mui/material';
 import Image from 'next/image';
 import Buttons from '../../../buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ import { setShowModelsModal } from '../../../../data/loader'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SimpleTypography from '../../../typography';
 import { sampleModel } from '@/data/samples/sample_model';
-import { IMAGES_BASE_URL } from '../../../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../../../utils/env_vars';
 import { selectMyProfile } from '../../../../data/me';
 import instance from '../../../../utils/axios';
 import { setLoginState, setOpenModal } from '../../../../data/modal_checker';
@@ -66,7 +66,7 @@ const myLoader = () => {
 
 const fakeModelImages = [1, 2, 3, 4, 5]
 
-const SimpleSlider = ({ name }: any) => {
+const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
   const [sliderBtnHover, setSliderBtnHover] = useState(0)
   const dispatch = useDispatch<any>()
 
@@ -88,21 +88,6 @@ const SimpleSlider = ({ name }: any) => {
     }
   }, [simpleModel])
 
-  function handleChangeTop() {
-    setBtnTopLoading(true)
-    instance.put(`models/${simpleModel?.id}`, {
-      top: !simpleModel?.top
-    }).then(res => {
-      if (res?.data?.success) {
-        toast.success(res?.data?.message)
-        setSimpleModel({ ...model, ...res?.data?.data?.model })
-      }
-      else toast.success(res?.data?.message)
-    }).catch(err => {
-      toast.error(err?.response?.data?.message)
-    }).finally(() => setBtnTopLoading(false))
-  };
-
   function SliderRightHandler() {
     if (sliderCount < simpleModel?.images?.length - 1) {
       setSliderCount(sliderCount + 1)
@@ -123,7 +108,9 @@ const SimpleSlider = ({ name }: any) => {
 
   if ("succeeded") {
     return (
-      <>
+      <Box
+        sx={sx}
+      >
         <Grid
           sx={
             name === "slider" ? {
@@ -241,33 +228,7 @@ const SimpleSlider = ({ name }: any) => {
                 />
               </Buttons>
             </Box>
-            {
-              name == 'slider' ?
-                <>
-                  <Buttons
-                    name={simpleModel?.top ? 'Удалить из ТОПа' : 'Поднять в ТОП'}
-                    className='purple_outlined__btn'
-                    childrenFirst={true}
-                    startIcon={topBtnLoading}
-                    onClick={handleChangeTop}
-                    sx={{
-                      width: '200px',
-                      position: 'absolute',
-                      top: 10,
-                      right: 10,
-                      zIndex: 1,
-                    }}
-                  >
-                    <Image
-                      alt='star'
-                      width={25}
-                      height={25}
-                      src={simpleModel?.top ? '/icons/star-purple.svg' : '/icons/star-line-purple.svg'}
-                    />
-                  </Buttons>
-                </>
-                : null
-            }
+
             <List sx={{
               transform: `translateX(-${sliderCount * wdth}px)`,
               padding: "0 !important",
@@ -302,11 +263,13 @@ const SimpleSlider = ({ name }: any) => {
             </List>
           </Grid>
         </Grid>
-      </>
+      </Box>
     )
   } else {
     return (
-      <>
+      <Box
+        sx={sx}
+      >
         <Grid
           sx={
             name === "slider" ? {
@@ -425,7 +388,7 @@ const SimpleSlider = ({ name }: any) => {
             </List>
           </Grid>
         </Grid>
-      </>
+      </Box>
     )
   }
 }

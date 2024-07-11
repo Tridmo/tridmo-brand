@@ -33,7 +33,7 @@ import {
   setSignupState,
 } from "@/data/modal_checker";
 import { sampleModel } from "@/data/samples";
-import { IMAGES_BASE_URL } from "../../../../utils/image_src";
+import { IMAGES_BASE_URL } from "../../../../utils/env_vars";
 import instance from "@/utils/axios";
 import { selectMyProfile } from "../../../../data/me";
 
@@ -103,11 +103,12 @@ export default function ModelInfo() {
 
   return (
     <Grid
-      className="products__info"
       item
       xs={12}
-      md={6}
-      sx={{ marginTop: "20px", maxWidth: "45.5% !important" }}
+      sm={12}
+      md={12}
+      lg={12}
+      xl={12}
     >
       <Box sx={{
         display: 'flex',
@@ -140,95 +141,6 @@ export default function ModelInfo() {
         text={simpleModel?.description}
         className="product__info--desc"
       />
-
-      <Box sx={brandBox}>
-        <Image
-          width={180}
-          height={180}
-          alt="Brand image"
-          style={{ objectFit: "cover" }}
-          src={`${IMAGES_BASE_URL}/${simpleModel?.brand?.logo}`}
-        />
-        <Box sx={{ marginLeft: "24px" }}>
-          <SimpleTypography className="brand__name" text="Имя бренда" />
-
-          <Link href={`/brands/${simpleModel?.brand?.slug}`}>
-            <SimpleTypography
-              sx={{ marginBottom: "15px" }}
-              className="brand__title"
-              text={simpleModel?.brand?.name}
-            />
-          </Link>
-
-          <Grid
-            container
-            spacing={1}
-            sx={{
-              display: "flex",
-              width: "100% !important",
-            }}
-          >
-            <Grid item sx={{ width: "100% !important" }}>
-              <Link
-                target="_blank"
-                href={`http://maps.google.com/?q=${simpleModel?.brand?.address}`}
-                rel="noopener noreferrer"
-                style={{ width: "100% !important" }}
-              >
-                <Buttons
-                  className="brand__box"
-                  sx={{ width: "100% !important" }}
-                  name=""
-                >
-                  <Image
-                    width={19}
-                    height={23}
-                    alt="Location"
-                    src={"/icons/location.svg"}
-                  />
-                  <Box sx={{ marginLeft: "11px" }}>
-                    <SimpleTypography className="brand__name" text="Локация" />
-                    <SimpleTypography
-                      className="brand__box--text"
-                      text={simpleModel?.brand?.address}
-                    />
-                  </Box>
-                </Buttons>
-              </Link>
-            </Grid>
-
-            <Grid item sx={{ width: "100% !important" }}>
-              <Link
-                href={`tel:${simpleModel?.brand?.phone}`}
-                style={{ width: "100% !important" }}
-              >
-                <Buttons
-                  className="brand__box"
-                  sx={{ width: "100% !important" }}
-                  name=""
-                >
-                  <Image
-                    width={19}
-                    height={23}
-                    alt="Phone number"
-                    src={"/icons/phone.svg"}
-                  />
-                  <Box sx={{ marginLeft: "11px" }}>
-                    <SimpleTypography
-                      className="brand__name"
-                      text="Номер телефона"
-                    />
-                    <SimpleTypography
-                      className="brand__box--text"
-                      text={`${simpleModel?.brand?.phone}`}
-                    />
-                  </Box>
-                </Buttons>
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
 
       <TableContainer
         sx={{
@@ -263,15 +175,15 @@ export default function ModelInfo() {
               </TableCell>
               <TableCell sx={TcStyle}>
                 <SimpleTypography
-                  text={`X: ${simpleModel?.width} см`}
+                  text={`Ширина: ${simpleModel?.width} см`}
                   className="table__text"
                 />
                 <SimpleTypography
-                  text={`Y: ${simpleModel?.height} см`}
+                  text={`Высота: ${simpleModel?.height} см`}
                   className="table__text"
                 />
                 <SimpleTypography
-                  text={`Z: ${simpleModel?.length} см`}
+                  text={`Длина: ${simpleModel?.length} см`}
                   className="table__text"
                 />
               </TableCell>

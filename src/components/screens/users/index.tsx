@@ -17,7 +17,7 @@ import Sorts from '../../views/sorts'
 import ModelCrumb from '../../breadcrumbs/model_crumb'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IMAGES_BASE_URL } from '../../../utils/image_src'
+import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import EmptyData from '../../views/empty_data'
 import BasicPagination from '../../pagination/pagination'
 import formatDate from '../../../utils/format_date'
@@ -36,6 +36,7 @@ import { setTimeout } from 'timers'
 import { selectRouteCrubms, setRouteCrumbs } from '../../../data/route_crumbs'
 import { RouteCrumb } from '../../../types/interfaces'
 import { getAllDesigners, selectAllDesigners } from '../../../data/get_all_designers'
+import { selectMyProfile } from '../../../data/me'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -156,10 +157,13 @@ export default function UsersPage() {
 
   const router = useRouter();
   const dispatch = useDispatch<any>();
+
+  const profile = useSelector(selectMyProfile)
+
   const users_status = useSelector((state: any) => state?.get_all_designers?.status)
-  const getModelNameFilter = useSelector((state: any) => state?.handle_filters?.user_name)
-  const getModelOrderBy = useSelector((state: any) => state?.handle_filters?.model_orderby)
-  const getModelOrder = useSelector((state: any) => state?.handle_filters?.model_order)
+  const getUsersNameFilter = useSelector((state: any) => state?.handle_filters?.users_name)
+  const getUsersOrderBy = useSelector((state: any) => state?.handle_filters?.users_orderby)
+  const getUsersOrder = useSelector((state: any) => state?.handle_filters?.users_order)
 
   const matches = useMediaQuery('(max-width:600px)');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -199,9 +203,10 @@ export default function UsersPage() {
 
   function handleSearch(searchValue) {
     dispatch(getAllDesigners({
+      brand_id: profile?.brand?.id,
       key: searchValue,
-      orderBy: getModelOrderBy,
-      order: getModelOrder,
+      orderBy: getUsersOrderBy,
+      order: getUsersOrder,
     }))
     dispatch(setUserNameFilter(searchValue))
   }
@@ -312,7 +317,7 @@ export default function UsersPage() {
                         <SearchInput
                           placeHolder='Поиск'
                           startIcon
-                          value={getModelNameFilter}
+                          value={getUsersNameFilter}
                           search={(s) => handleSearch(s)}
                           sx={{
                             borderColor: '#B8B8B8',

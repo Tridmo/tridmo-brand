@@ -53,6 +53,6 @@ const get_registrations_stats = createSlice({
 });
 
 export const reducer = get_registrations_stats.reducer;
-export const selectRegStats = (state: any) => state?.get_registrations_stats?.data[0]?.data
+export const selectRegStats = (state: any) => state?.get_registrations_stats?.data?.[0]?.data
 export const selectRegStatsStatus = (state: any) => state?.get_registrations_stats?.status
 export default get_registrations_stats;

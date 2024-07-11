@@ -23,7 +23,7 @@ import Image from "next/image";
 import SimpleTypography from "@/components/typography";
 import BasicPagination from "@/components/pagination/pagination";
 import Link from "next/link";
-import { IMAGES_BASE_URL } from "../../../utils/image_src";
+import { IMAGES_BASE_URL } from "../../../utils/env_vars";
 import EmptyData from "../../views/empty_data";
 import SearchInput from "../../inputs/search";
 import SimpleSelect from "../../inputs/simple_select";

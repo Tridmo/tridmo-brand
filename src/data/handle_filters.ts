@@ -7,7 +7,16 @@ const initialState = {
     value: 'downloads'
   },
   author: '',
-  user_name: '',
+
+  users_name: '',
+  users_orderby: '',
+  users_order: '',
+  users_page: 1,
+
+  model_downloaders_name: '',
+  model_downloaders_orderby: '',
+  model_downloaders_order: '',
+  model_downloaders_page: 1,
 
   downloaded_model_brand: '',
   downloaded_model_name: '',
@@ -101,7 +110,13 @@ const handle_filters = createSlice({
       state.model_name = action.payload;
     },
     setUserNameFilter: (state: any, action: PayloadAction<string>) => {
-      state.user_name = action.payload;
+      state.users_name = action.payload;
+    },
+    setUserOrderBy: (state: any, action: PayloadAction<modelOrderBy>) => {
+      state.users_orderby = action.payload;
+    },
+    setUserOrder: (state: any, action: PayloadAction<order>) => {
+      state.users_order = action.payload;
     },
     setModelOrderBy: (state: any, action: PayloadAction<modelOrderBy>) => {
       state.model_orderby = action.payload;
@@ -289,6 +304,20 @@ const handle_filters = createSlice({
       state.model_interiors_order = params.model_interiors_order;
     },
 
+
+    set_model_downloaders_name: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.model_downloaders_name = params.model_downloaders_name;
+    },
+    set_model_downloaders_orderby: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.model_downloaders_orderby = params.model_downloaders_orderby;
+    },
+    set_model_downloaders_order: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.model_downloaders_order = params.model_downloaders_order;
+    },
+
     setPageFilter: (
       state: any,
       action: PayloadAction<{
@@ -298,6 +327,7 @@ const handle_filters = createSlice({
         'designer_downloads_page' |
         'designer_interiors_page' |
         'model_interiors_page' |
+        'model_downloaders_page' |
         'brand_models_page' |
         'designers_page' |
         'brands_page';
@@ -319,6 +349,8 @@ const handle_filters = createSlice({
 
 export const {
   setUserNameFilter,
+  setUserOrderBy,
+  setUserOrder,
   setTopListItemLimit,
   setTopListTopic,
   setAuthor,
@@ -372,6 +404,11 @@ export const {
   set_model_interiors_author,
   set_model_interiors_orderby,
   set_model_interiors_order,
+
+
+  set_model_downloaders_name,
+  set_model_downloaders_orderby,
+  set_model_downloaders_order,
 
   set_brand_models_top,
   set_brand_models_name,

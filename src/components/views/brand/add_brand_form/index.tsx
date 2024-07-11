@@ -18,7 +18,7 @@ import * as Yup from 'yup';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import MultipleSelect from '../../../inputs/multiple_select';
 import { getOneBrand, selectOneBrand } from "../../../../data/get_one_brand";
-import { IMAGES_BASE_URL } from "../../../../utils/image_src";
+import { IMAGES_BASE_URL } from "../../../../utils/env_vars";
 import { setRouteCrumbs } from "../../../../data/route_crumbs";
 
 const availabilityData = [

@@ -11,6 +11,7 @@ import MyLoader from '../skeleton/Skeleton'
 import CustomCard from '../custom_card';
 import Skeleton from '@mui/material/Skeleton';
 import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
+import { selectMyProfile } from '../../data/me';
 
 type InputProps = {
   item?: object,
@@ -31,6 +32,7 @@ const Label = styled(Paper)(({ theme }: ThemeProps) => ({
 
 export default function SimpleList(props: InputProps) {
   const dispatch = useDispatch<any>();
+  const profile = useSelector(selectMyProfile)
 
   // const all__brands = useSelector(selectAllModels)
   // const all__models__status = useSelector((state: any) => state?.get_all_models?.status)
@@ -38,7 +40,7 @@ export default function SimpleList(props: InputProps) {
 
   React.useEffect(() => {
     dispatch(getAllModels({
-      brand: undefined,
+      brand: profile?.brand?.id,
       categories: undefined,
       colors: undefined,
       styles: undefined,
@@ -62,7 +64,7 @@ export default function SimpleList(props: InputProps) {
                   {/* <SimpleTypography text='16%' className='card__sale' /> */}
                   <Image
                     src={"/img/card-loader.jpg"}
-                    // srcSet={`${process.env.NEXT_PUBLIC_BASE_IMG_URL}/${model?.model_images[0]?.image[0]?.src}`}
+                    // srcSet={`${process.env.NEXT_PUBLIC_BASE_IMG_URL}/${model?.model_images?.[0]?.image?.[0]?.src}`}
                     // layout='fill'
                     width={282}
                     height={282}

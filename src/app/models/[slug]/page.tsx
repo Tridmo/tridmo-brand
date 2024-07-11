@@ -19,6 +19,7 @@ import { currentDate } from '../../../utils/format_date';
 import { getModelTagsStats } from '../../../data/statistics/get_tags_stats';
 import { getModelInteriors } from '../../../data/get_model_interiors';
 import { getModelTagsCategories } from '../../../data/categories';
+import { getModelDownloaders } from '../../../data/get_all_designers';
 
 const LoaderStyle = {
   // width: "100px !important",
@@ -64,7 +65,8 @@ export default function OneProduct() {
       dispatch(getModelDownloadsStats({ month, year, model_id: model?.id }))
       dispatch(getModelTagsStats({ month, year, model_id: model?.id }))
       dispatch(getModelInteriors({ model_id: model?.id }))
-      dispatch(getModelTagsCategories(model?.id))
+      // dispatch(getModelTagsCategories(model?.id))
+      dispatch(getModelDownloaders({ model_id: model?.id }))
     }
   }, [model, getOneModel__status])
 

@@ -13,7 +13,7 @@ export default function TopLists() {
           width: '100%',
         }}
       >
-        <Grid item xs={12} lg={3.88} md={12} sm={12}
+        <Grid item xs={true} lg={true} md={true} sm={true}
           sx={{
             p: '24px',
             bgcolor: '#fff',
@@ -24,19 +24,7 @@ export default function TopLists() {
           <ModelTopList />
         </Grid>
 
-        <Grid item xs={12} lg={3.88} md={12} sm={12}
-          sx={{
-            p: '24px',
-            bgcolor: '#fff',
-            boxShadow: '0px 3px 4px 0px #00000014',
-            borderRadius: '4px',
-          }}
-        >
-          <BrandTopList />
-        </Grid>
-
-
-        <Grid item xs={12} lg={3.88} md={12} sm={12}
+        <Grid item xs={true} lg={true} md={true} sm={true}
           sx={{
             p: '24px',
             bgcolor: '#fff',

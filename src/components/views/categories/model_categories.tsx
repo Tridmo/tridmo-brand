@@ -13,6 +13,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { resetFilters, setCategoryFilter, setCategoryNameFilter, setCategorySelectedChild } from '../../../data/handle_filters'
+import { selectMyProfile } from '../../../data/me'
 
 const CustomCategoryItem = styled(Accordion)(
   ({ theme }) =>
@@ -53,6 +54,8 @@ interface categoryProps {
 }
 
 const Categories = () => {
+
+  const profile = useSelector(selectMyProfile)
 
   const router = useRouter();
   const pathname = usePathname();
@@ -188,6 +191,7 @@ const Categories = () => {
     }
 
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: res,
       // colors: getModelColorFilter,
       styles: getModelStyleFilter,

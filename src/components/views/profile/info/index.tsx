@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { sampleUser } from '@/data/samples';
 import { selectDesignerProfile } from '../../../../data/get_designer';
 import { selectMyProfile } from '../../../../data/me';
-import { IMAGES_BASE_URL } from '../../../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../../../utils/env_vars';
 import { setProfileEditState, setOpenModal } from '../../../../data/modal_checker';
 import formatDate from '../../../../utils/format_date';
 import CountsGrid from '../../statistics/counts_component';

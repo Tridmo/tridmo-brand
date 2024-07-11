@@ -13,6 +13,7 @@ import useHash from "../hooks/use_hash";
 import { resetMyProfile } from '../../data/get_profile'
 import { toast } from 'react-toastify'
 import { setVerifyState } from '../../data/modal_checker'
+import { getChatToken } from "../../data/get_chat_token";
 
 
 export const AuthProvider = ({ children }) => {
@@ -74,11 +75,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function loadUserFromCookies() {
+      setAuthToken(Cookies.get('accessToken'))
 
       if (Cookies.get('accessToken')) {
-        setAuthToken(Cookies.get('accessToken'))
-        dispatch(setAuthState(true));
-
         if (myProfileStatus === 'idle') {
           await dispatch(getMyProfile())
         }
@@ -86,6 +85,8 @@ export const AuthProvider = ({ children }) => {
           dispatch(setAuthState(false));
         }
 
+        dispatch(getChatToken())
+        dispatch(setAuthState(true));
       }
 
       if (Cookies.get('refreshToken')) {

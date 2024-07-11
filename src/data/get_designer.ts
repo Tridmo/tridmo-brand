@@ -45,5 +45,5 @@ const get_designer = createSlice({
 
 export const { resetMyProfile } = get_designer.actions;
 export const reducer = get_designer.reducer;
-export const selectDesignerProfile = (state: any) => state?.get_designer?.data[0]?.data?.user
+export const selectDesignerProfile = (state: any) => state?.get_designer?.data?.[0]?.data?.user
 export default get_designer

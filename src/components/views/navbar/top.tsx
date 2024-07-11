@@ -24,7 +24,7 @@ import BasicModal from '@/components/modals/modal';
 import { switch_on } from '../../../data/toggle_cart';
 import { setAuthState } from '../../../data/login';
 import Cookies from 'js-cookie'
-import { IMAGES_BASE_URL } from '../../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../../utils/env_vars';
 import RouteCrumbs from './route_crumbs';
 
 const Item = styled(Paper)(({ theme }) => ({

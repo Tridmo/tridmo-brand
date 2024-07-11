@@ -48,5 +48,5 @@ const get_one_model = createSlice({
 
 export const { resetOneModel, getOneModelReducer } = get_one_model.actions;
 export const reducer = get_one_model.reducer;
-export const selectOneModel = (state: any) => state?.get_one_model?.data[0]?.data?.model
+export const selectOneModel = (state: any) => state?.get_one_model?.data?.[0]?.data?.model
 export default get_one_model;

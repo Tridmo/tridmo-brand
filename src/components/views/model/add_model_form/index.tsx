@@ -25,7 +25,7 @@ import { selectRenderPlatforms } from '../../../../data/get_render_platforms';
 import ColorsSelect from '../../../inputs/color_select';
 import MultipleSelect from '../../../inputs/multiple_select';
 import { selectOneModel } from "../../../../data/model_slider";
-import { IMAGES_BASE_URL } from "../../../../utils/image_src";
+import { IMAGES_BASE_URL } from "../../../../utils/env_vars";
 import { selectOneBrand } from "../../../../data/get_one_brand";
 import { setRouteCrumbs } from "../../../../data/route_crumbs";
 

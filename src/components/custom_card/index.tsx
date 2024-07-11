@@ -6,7 +6,7 @@ import SimpleTypography from '../typography';
 import Link from 'next/link';
 import { ThemeProps } from '../../types/theme';
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { IMAGES_BASE_URL } from '../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../utils/env_vars';
 
 type InputProps = {
   item?: object,
@@ -25,6 +25,7 @@ const CustomBoxWrapper = styled(Box)(
 );
 type CustomCardProps = {
   type?: any,
+  padding?: number,
   model?: any,
   link?: any,
   imgHeight?: any,
@@ -33,7 +34,7 @@ type CustomCardProps = {
   withAuthor?: boolean,
 }
 
-function CustomCard({ model, link, imgHeight, tagIcon, tagText, withAuthor }: CustomCardProps) {
+function CustomCard({ model, link, imgHeight, tagIcon, tagText, withAuthor, padding }: CustomCardProps) {
 
   const Label = styled(Paper)(({ theme }: ThemeProps) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -45,6 +46,7 @@ function CustomCard({ model, link, imgHeight, tagIcon, tagText, withAuthor }: Cu
     borderBottomRightRadius: 0,
   }));
 
+  const mainPadding = padding || 12
 
   return (
     <Link key={model?.id} href={link ? link : ""} style={{ margin: '0 0 15px 0', textDecoration: "none" }}>
@@ -56,7 +58,7 @@ function CustomCard({ model, link, imgHeight, tagIcon, tagText, withAuthor }: Cu
         position: "relative",
         cursor: "pointer",
         transition: "all 0.4s ease",
-        padding: "12px 12px 0 12px",
+        padding: `${mainPadding}px ${mainPadding}px 0 ${mainPadding}px`,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between"
@@ -91,23 +93,28 @@ function CustomCard({ model, link, imgHeight, tagIcon, tagText, withAuthor }: Cu
               </Box>
               : null
         }
-        <LazyLoadImage
-          src={model.cover ? (model?.cover[0]?.image_src ? `${IMAGES_BASE_URL}/${model?.cover[0]?.image_src}` : '') : ''}
-          alt="Model"
-          effect="blur"
-          width={"100%"}
-          placeholderSrc={"/img/card-loader.jpg"}
-          height={imgHeight || `208px`}
-          delayTime={500}
-          style={{ objectFit: "cover" }}
-        />
+        <Box>
+          <LazyLoadImage
+            src={model.cover ? (model?.cover?.[0]?.image_src ? `${IMAGES_BASE_URL}/${model?.cover?.[0]?.image_src}` : '') : ''}
+            alt="Model"
+            effect="blur"
+            width={"100%"}
+            height={imgHeight || `208px`}
+            placeholderSrc={"/img/card-loader.jpg"}
+            delayTime={500}
+            objectFit={'cover'}
+            style={{
+              objectFit: 'cover'
+            }}
+          />
+        </Box>
         <Label
           sx={{
             width: "100%",
             display: "flex",
             alignItems: 'center',
             justifyContent: "space-between",
-            padding: "13px 0"
+            padding: "10px 0"
           }}
         >
           {

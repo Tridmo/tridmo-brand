@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { selectAllDesigners } from '../../../data/get_all_designers';
 import EmptyData from '../../views/empty_data';
 import { selectMyProfile } from '../../../data/me';
-import { IMAGES_BASE_URL } from '../../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../../utils/env_vars';
 
 
 export default function DesignersPage() {

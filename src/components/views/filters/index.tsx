@@ -21,6 +21,7 @@ import { flatten } from "lodash";
 import { useDispatch } from 'react-redux';
 import { setCategoryFilter, setColorFilter, setStyleFilter } from '../../../data/handle_filters'
 import { getAllModels } from '../../../data/get_all_models';
+import { selectMyProfile } from '../../../data/me';
 const FiltersItem = styled(Box)(
   ({ theme }: ThemeProps) => `
         background: #FFFFFF;
@@ -53,6 +54,8 @@ function Filters() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const profile = useSelector(selectMyProfile)
+
   // apply filters
   const [category_filter, setCategory_filter] = useState<any>([]);
   const [color_filter, setColor_filter] = useState<any>([]);
@@ -114,7 +117,7 @@ function Filters() {
       if (getModelColorFilter && colorsData__status === "succeeded") {
         let rtCt = getModelColorFilter;
         let ctCollecter: any[] = [];
-        for (let color of allColors[0]?.data) {
+        for (let color of allColors?.[0]?.data) {
           for (let rt of rtCt) {
             if (rt == color.id) {
               ctCollecter.push(color);
@@ -180,6 +183,7 @@ function Filters() {
     createQueryString('category', arr)
 
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: arr,
       colors: getModelColorFilter,
       styles: getModelStyleFilter,
@@ -241,6 +245,7 @@ function Filters() {
     );
 
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: getModelCategoryFilter,
       colors: getModelColorFilter,
       styles: arr,
@@ -255,6 +260,7 @@ function Filters() {
     router.push(`${pathname}/?page=${1}`);
 
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: [],
       colors: [],
       styles: [],

@@ -38,5 +38,5 @@ const get_one_brand = createSlice({
 
 
 export const reducer = get_one_brand.reducer;
-export const selectOneBrand = (state: any) => state?.get_one_brand?.data[0]?.data?.brand
+export const selectOneBrand = (state: any) => state?.get_one_brand?.data?.[0]?.data?.brand
 export default get_one_brand

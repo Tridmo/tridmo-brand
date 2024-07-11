@@ -218,15 +218,15 @@ const categories = createSlice({
   }
 });
 export const { setOneSelectedCategory } = categories.actions;
-export const selectCategories = (state: any) => state?.categories?.data[0]?.data
-export const selectOneCategory = (state: any) => state?.categories?.one_data[0]?.data
-export const selectCategoriesWithModelCount = (state: any) => state?.categories?.data_with_model_count[0]?.data
-export const selectCategoriesByUserDownloads = (state: any) => state?.categories?.user_downloads_data[0]?.data
-export const selectCategoriesByUserInteriors = (state: any) => state?.categories?.user_interiors_data[0]?.data
-export const selectModelCategories = (state: any) => state?.categories?.model_data[0]?.data
-export const selectInteriorCategories = (state: any) => state?.categories?.interior_data[0]?.data
-export const selectBrandCategories = (state: any) => state?.categories?.brand_data[0]?.data
-export const selectModelTagsCategories = (state: any) => state?.categories?.model_tags_data[0]?.data
+export const selectCategories = (state: any) => state?.categories?.data?.[0]?.data
+export const selectOneCategory = (state: any) => state?.categories?.one_data?.[0]?.data
+export const selectCategoriesWithModelCount = (state: any) => state?.categories?.data_with_model_count?.[0]?.data
+export const selectCategoriesByUserDownloads = (state: any) => state?.categories?.user_downloads_data?.[0]?.data
+export const selectCategoriesByUserInteriors = (state: any) => state?.categories?.user_interiors_data?.[0]?.data
+export const selectModelCategories = (state: any) => state?.categories?.model_data?.[0]?.data
+export const selectInteriorCategories = (state: any) => state?.categories?.interior_data?.[0]?.data
+export const selectBrandCategories = (state: any) => state?.categories?.brand_data?.[0]?.data
+export const selectModelTagsCategories = (state: any) => state?.categories?.model_tags_data?.[0]?.data
 
 export const reducer = categories.reducer;
 export default categories

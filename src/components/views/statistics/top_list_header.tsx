@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { currentDate } from "../../../utils/format_date";
 import SimpleSelect from "../../inputs/simple_select";
 import { selectTopListItemLimit, selectTopListTopic, setTopListItemLimit, setTopListTopic } from "../../../data/handle_filters";
+import { selectMyProfile } from "../../../data/me";
 
 interface Props {
   sx?: SxProps;
@@ -50,6 +51,7 @@ export default function TopListHeader({ sx }: Props) {
   const { year, month, week } = currentDate()
   const topListItemLimit = useSelector(selectTopListItemLimit)
   const topListTopic = useSelector(selectTopListTopic)
+  const profile = useSelector(selectMyProfile)
 
   const [selectedYear, setSelectedYear] = useState<any>('')
   const [selectedMonth, setSelectedMonth] = useState<any>('')
@@ -57,33 +59,33 @@ export default function TopListHeader({ sx }: Props) {
 
   function handleMonthSelect(month) {
     setSelectedMonth(month)
-    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek }))
-    dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek }))
-    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek }))
+    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek, brand_id: profile?.brand?.id }))
+    // dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek, brand_id: profile?.brand?.id }))
+    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: month, week: selectedWeek, brand_id: profile?.brand?.id }))
   }
   function handleYearSelect(year) {
     setSelectedYear(year)
-    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek }))
-    dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek }))
-    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek }))
+    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    // dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: year, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
   }
   function handleWeekSelect(week) {
     setSelectedWeek(week)
-    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week }))
-    dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week }))
-    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week }))
+    dispatch(getModelsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week, brand_id: profile?.brand?.id }))
+    // dispatch(getBrandsStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week, brand_id: profile?.brand?.id }))
+    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: topListItemLimit, year: selectedYear || year, month: selectedMonth || month, week: week, brand_id: profile?.brand?.id }))
   }
   function handleLimitChange(limit) {
     dispatch(setTopListItemLimit(limit))
-    dispatch(getModelsStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
-    dispatch(getBrandsStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
-    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
+    dispatch(getModelsStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    // dispatch(getBrandsStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    dispatch(getCategoriesStats({ topic: topListTopic.value, limit: limit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
   }
   function handleTopicChange({ value, name }) {
     dispatch(setTopListTopic({ name, value }))
-    dispatch(getModelsStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
-    dispatch(getBrandsStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
-    dispatch(getCategoriesStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek }))
+    dispatch(getModelsStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    // dispatch(getBrandsStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
+    dispatch(getCategoriesStats({ topic: value, limit: topListItemLimit, year: selectedYear, month: selectedMonth, week: selectedWeek, brand_id: profile?.brand?.id }))
   }
 
   return (

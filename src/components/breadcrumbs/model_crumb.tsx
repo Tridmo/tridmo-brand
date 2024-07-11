@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link'
 import { Box, ListItem } from '@mui/material';
 import SimpleTypography from '../typography';
 import Image from 'next/image';
 import { setCategoryFilter, setCategoryNameFilter, setColorFilter, setStyleFilter } from '../../data/handle_filters';
 import { getAllModels } from '../../data/get_all_models'
+import { selectMyProfile } from '../../data/me';
 
 interface breadCrumbProps {
   style?: string | undefined,
@@ -17,8 +18,11 @@ interface breadCrumbProps {
 }
 export default function ModelCrumb(props: breadCrumbProps) {
   const dispatch = useDispatch<any>()
+  const profile = useSelector(selectMyProfile)
+
   const handleGoBack = () => {
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: [],
       colors: [],
       styles: [],

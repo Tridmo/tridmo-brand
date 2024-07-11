@@ -8,7 +8,8 @@ const initialState = {
   progress: 0,
 };
 export const getCategoriesStats = createAsyncThunk('/statistics/categories',
-  async (wrapper?: {
+  async (wrapper: {
+    brand_id: string;
     limit?: number;
     month?: any;
     year?: any;
@@ -16,7 +17,7 @@ export const getCategoriesStats = createAsyncThunk('/statistics/categories',
     topic?: any;
     [x: string]: any;
   }) => {
-    let send__route = `/statistics/categories`
+    let send__route = `/statistics/categories/?brand_id=${wrapper.brand_id}`
 
     send__route +=
       wrapper?.month
@@ -72,6 +73,6 @@ const get_categories_stats = createSlice({
 });
 
 export const reducer = get_categories_stats.reducer;
-export const selectCategoriesStats = (state: any) => state?.get_categories_stats?.data[0]?.data
+export const selectCategoriesStats = (state: any) => state?.get_categories_stats?.data?.[0]?.data
 export const selectCategoriesStatsStatus = (state: any) => state?.get_categories_stats?.status
 export default get_categories_stats;

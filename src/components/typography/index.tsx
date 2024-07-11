@@ -11,6 +11,7 @@ type TypographyProps = {
   className?: string,
   children?: any,
   paragraph?: any,
+  hoverTitle?: string,
 };
 
 const TypographyWrapper = styled(Typography)(
@@ -29,7 +30,7 @@ const TypographyWrapper = styled(Typography)(
       }
 
       &.MuiTypography-card__title {
-        width:60%;
+        width: 60%;
         overflow: hidden;
         white-space: nowrap;
         font-weight: 400;
@@ -37,15 +38,12 @@ const TypographyWrapper = styled(Typography)(
         text-align: start;
         font-size: 14px;
         line-height: 18px;
-        display: flex;
+        display: inline-block;
         align-items: center;
         color: ${theme.colors.gray[700]};
-        background-image: linear-gradient(90deg,#000000 0%,rgba(0,0,0,0));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
         position:relative;
       }
-
+        
       &.MuiTypography-modal__sub-title {
         font-weight: 400;
         font-size: 16px;
@@ -924,6 +922,7 @@ const SimpleTypography = (props: TypographyProps) => {
   return (
     // <Button className={`${classes.styles} MuiButton-text-${props.color} MuiButton-bg-${props.color}`}>{props?.name}</Button>
     <TypographyWrapper
+      title={props?.hoverTitle}
       sx={{ whiteSpace: 'pre-line', ...props?.sx }}
       className={`MuiTypography-${props?.className}`}
       variant={props?.variant}

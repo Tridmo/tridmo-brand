@@ -17,7 +17,7 @@ import Sorts from '../../views/sorts'
 import ModelCrumb from '../../breadcrumbs/model_crumb'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IMAGES_BASE_URL } from '../../../utils/image_src'
+import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import EmptyData from '../../views/empty_data'
 import BasicPagination from '../../pagination/pagination'
 import formatDate from '../../../utils/format_date'
@@ -37,6 +37,7 @@ import { selectRouteCrubms, setRouteCrumbs } from '../../../data/route_crumbs'
 import { RouteCrumb } from '../../../types/interfaces'
 import { selectBrandModels } from '../../../data/get_brand_models'
 import { selectOneBrand } from '../../../data/get_one_brand'
+import { selectMyProfile } from '../../../data/me'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -153,7 +154,7 @@ export default function BrandModels() {
   const dispatch = useDispatch<any>();
   // const searchParams = useSearchParams();
 
-  const brand = useSelector(selectOneBrand);
+  const profile = useSelector(selectMyProfile);
 
   const all__models_status = useSelector((state: any) => state?.get_brand_models?.status)
   const getModelCategoryFilter = useSelector((state: any) => state?.handle_filters?.brand_models_categories)
@@ -181,10 +182,10 @@ export default function BrandModels() {
   }
 
   useMemo(() => {
-    instance.get(`/models/count/?top=false&brand_id=${brand?.id}`).then(res => {
+    instance.get(`/models/count/?top=false&brand_id=${profile?.brand?.id}`).then(res => {
       setAllModelsCount(res?.data?.data?.count)
     })
-    instance.get(`/models/count/?top=true&brand_id=${brand?.id}`).then(res => {
+    instance.get(`/models/count/?top=true&brand_id=${profile?.brand?.id}`).then(res => {
       setTopModelsCount(res?.data?.data?.count)
     })
   }, [all__models, all__models_status])
@@ -193,7 +194,7 @@ export default function BrandModels() {
     console.log(getModelNameFilter, 'state.model_name');
     dispatch(getAllModels({
       categories: getModelCategoryFilter,
-      brand: brand?.id,
+      brand: profile?.brand?.id,
       top: undefined,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -207,7 +208,7 @@ export default function BrandModels() {
   function handleTopClick(event) {
     dispatch(getAllModels({
       categories: getModelCategoryFilter,
-      brand: brand?.id,
+      brand: profile?.brand?.id,
       top: true,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -233,7 +234,7 @@ export default function BrandModels() {
     const filter = e.target.value == -1 ? [] : [e.target.value];
     dispatch(getAllModels({
       categories: filter,
-      brand: brand?.id,
+      brand: profile?.brand?.id,
       top: getModelTopFilter,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -245,7 +246,7 @@ export default function BrandModels() {
 
   function handleSearch(searchValue) {
     dispatch(getAllModels({
-      brand: brand?.id,
+      brand: profile?.brand?.id,
       categories: getModelCategoryFilter,
       name: searchValue,
       top: getModelTopFilter,
@@ -262,7 +263,7 @@ export default function BrandModels() {
     }).then(res => {
       if (res?.data?.success) {
         toast.success(res?.data?.message)
-        dispatch(getAllModels({}))
+        dispatch(getAllModels({ brand: profile?.brand?.id }))
       }
       else {
         toast.success(res?.data?.message)
@@ -286,7 +287,7 @@ export default function BrandModels() {
               .then(res => {
                 if (res?.data?.success) {
                   toast.success(res?.data?.message)
-                  dispatch(getAllModels({}))
+                  dispatch(getAllModels({ brand: profile?.brand?.id }))
                   dispatch(setConfirmState(false))
                   dispatch(setOpenModal(false))
                   dispatch(resetConfirmProps())
@@ -532,7 +533,7 @@ export default function BrandModels() {
                         </SimpleSelect>
                       </FormControl>
 
-                      <Link href={`/models/addnew/?brand=${brand?.slug}`}>
+                      <Link href={`/models/addnew`}>
                         <Buttons
                           name="Добавить модель"
                           childrenFirst={true}
@@ -609,7 +610,7 @@ export default function BrandModels() {
                                 opacity: '1'
                               },
                               '&::after': {
-                                backgroundImage: `url(${IMAGES_BASE_URL}/${model?.cover[0]?.image_src})`,
+                                backgroundImage: `url(${IMAGES_BASE_URL}/${model?.cover?.[0]?.image_src})`,
                                 transition: 'opacity 0.3s ease',
                                 zIndex: 3000,
                                 backgroundRepeat: 'no-repeat',
@@ -630,8 +631,8 @@ export default function BrandModels() {
                           >
                             <Image
                               src={model?.cover ? (
-                                model?.cover[0]?.image_src ? (
-                                  `${IMAGES_BASE_URL}/${model?.cover[0]?.image_src}`
+                                model?.cover?.[0]?.image_src ? (
+                                  `${IMAGES_BASE_URL}/${model?.cover?.[0]?.image_src}`
                                 ) : ''
                               ) : ''}
                               alt='Landing image'

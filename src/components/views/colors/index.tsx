@@ -9,6 +9,7 @@ import { getAllModels } from '../../../data/get_all_models'
 import { setCategoryFilter, setColorFilter } from '../../../data/handle_filters'
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { useRouter, useSearchParams } from 'next/navigation'
+import { selectMyProfile } from '../../../data/me'
 
 interface colorProps {
   id: string,
@@ -25,6 +26,8 @@ function ColorsFilter() {
   const router = useRouter();
   // const searchParams = useSearchParams();
   const [custom__colors, setCustom__colors] = React.useState<any>([]);
+  const profile = useSelector(selectMyProfile)
+
 
   // ---- filters selector ----- //
 
@@ -38,7 +41,7 @@ function ColorsFilter() {
     if (ColorsStatus === "succeeded") {
       if (router) {
         let arr = new Array();
-        AllColors[0]?.data?.forEach((color: colorProps) => {
+        AllColors?.[0]?.data?.forEach((color: colorProps) => {
           if (getModelColorFilter?.includes(color.id) || getModelColorFilter?.includes((color.id)?.toString()) || getModelColorFilter == color?.id) {
             arr.push({
               id: color?.id,
@@ -85,6 +88,7 @@ function ColorsFilter() {
     }
     dispatch(setColorFilter({ cnex: res }))
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: getModelCategoryFilter,
       colors: res,
       styles: getModelStyleFilter,

@@ -49,5 +49,5 @@ const get_one_interior = createSlice({
 
 export const { resetOneInterior, getOneInteriorReducer } = get_one_interior.actions;
 export const reducer = get_one_interior.reducer;
-export const selectOneInterior = (state: any) => state?.get_one_interior?.data[0]?.data?.interior
+export const selectOneInterior = (state: any) => state?.get_one_interior?.data?.[0]?.data?.interior
 export default get_one_interior;

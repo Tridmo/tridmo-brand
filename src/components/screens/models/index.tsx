@@ -17,7 +17,7 @@ import Sorts from '../../views/sorts'
 import ModelCrumb from '../../breadcrumbs/model_crumb'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IMAGES_BASE_URL } from '../../../utils/image_src'
+import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import EmptyData from '../../views/empty_data'
 import BasicPagination from '../../pagination/pagination'
 import formatDate from '../../../utils/format_date'
@@ -35,6 +35,7 @@ import { ConfirmContextProps, resetConfirmData, resetConfirmProps, setConfirmPro
 import { setTimeout } from 'timers'
 import { selectRouteCrubms, setRouteCrumbs } from '../../../data/route_crumbs'
 import { RouteCrumb } from '../../../types/interfaces'
+import { selectMyProfile } from '../../../data/me'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -149,14 +150,11 @@ export default function ModelsPage() {
 
   const router = useRouter();
   const dispatch = useDispatch<any>();
+  const profile = useSelector(selectMyProfile)
+
   // const searchParams = useSearchParams();
-  const IsFilterOpen = useSelector((state: any) => state?.modal_checker?.isFilterModal)
-  const searchedModels = useSelector((state: any) => state?.search_models?.data)
   const all__models_status = useSelector((state: any) => state?.get_all_models?.status)
-  const top__models_status = useSelector((state: any) => state?.get_top_models?.status)
   const getModelCategoryFilter = useSelector((state: any) => state?.handle_filters?.categories)
-  const getModelBrandFilter = useSelector((state: any) => state?.handle_filters?.model_brand)
-  const getModelCategoryNameFilter = useSelector((state: any) => state?.handle_filters?.category_name)
   const getModelColorFilter = useSelector((state: any) => state?.handle_filters?.colors)
   const getModelStyleFilter = useSelector((state: any) => state?.handle_filters?.styles)
   const getModelPageFilter = useSelector((state: any) => state?.handle_filters?.page)
@@ -171,8 +169,6 @@ export default function ModelsPage() {
 
   const all__models = useSelector(selectAllModels)
   const all__categories = useSelector(selectCategories)
-  const all__brands = useSelector(selectAllBrands)
-  const route_crumbs = useSelector(selectRouteCrubms)
 
   // const keyword = searchParams.get('keyword') as string
   const [categories, setCategories] = useState<any[]>([])
@@ -180,7 +176,6 @@ export default function ModelsPage() {
   const [allModelsCount, setAllModelsCount] = useState<number>(0)
   const [topModelsCount, setTopModelsCount] = useState<number>(0)
   const [category, setCategoryId] = useState<number>(-1)
-  const [brand, setBrandId] = useState<any>(-1)
   const [selectedModel, setSelectedModel] = useState<any>(null)
 
   useEffect(() => {
@@ -191,18 +186,13 @@ export default function ModelsPage() {
   }, [])
 
   useMemo(() => {
-    instance.get('/models/counts/?all=true&top=true').then(res => {
-      setAllModelsCount(res?.data?.data?.counts?.all)
-      setTopModelsCount(res?.data?.data?.counts?.top)
-    })
-  }, [all__models, all__models_status])
-  useMemo(() => {
-    if (getModelTopFilter == true) {
-      setTopModelsCount(all__models?.data?.pagination?.data_count)
-    } else {
-      setAllModelsCount(all__models?.data?.pagination?.data_count)
+    if (all__models) {
+      instance.get(`/models/counts/?top=true&brand_id=${profile?.brand?.id}`).then(res => {
+        setAllModelsCount(res?.data?.data?.counts?.count)
+        setTopModelsCount(res?.data?.data?.counts?.top)
+      })
     }
-  }, [all__models, all__models_status, getModelTopFilter])
+  }, [all__models])
 
   useMemo(() => {
     if (all__categories) {
@@ -216,13 +206,6 @@ export default function ModelsPage() {
   function navigateTo(link: string) {
     router.push(link)
   }
-  // function setActiveTopButton(index: number) {
-  //     topButtons[index].active = true
-  //     topButtons.forEach((e, i) => {
-  //         if (index != i) topButtons[i].active = false
-  //     })
-  //     setTopButtons(topButtons)
-  // }
 
   function handleAllClick(event) {
     console.log(getModelNameFilter, 'state.model_name');
@@ -230,7 +213,7 @@ export default function ModelsPage() {
       categories: getModelCategoryFilter,
       colors: getModelColorFilter,
       styles: getModelStyleFilter,
-      brand: getModelBrandFilter,
+      brand: profile?.brand?.id,
       top: undefined,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -246,7 +229,7 @@ export default function ModelsPage() {
       categories: getModelCategoryFilter,
       colors: getModelColorFilter,
       styles: getModelStyleFilter,
-      brand: getModelBrandFilter,
+      brand: profile?.brand?.id,
       top: true,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -274,7 +257,7 @@ export default function ModelsPage() {
       categories: filter,
       colors: getModelColorFilter,
       styles: getModelStyleFilter,
-      brand: getModelBrandFilter,
+      brand: profile?.brand?.id,
       top: getModelTopFilter,
       name: getModelNameFilter,
       page: getModelPageFilter,
@@ -284,26 +267,9 @@ export default function ModelsPage() {
     dispatch(setCategoryFilter(filter))
   }
 
-  function handleBrandChange(e) {
-    setBrandId(e.target.value)
-    const filter = e.target.value == -1 ? '' : e.target.value;
-    dispatch(getAllModels({
-      brand: filter,
-      categories: getModelCategoryFilter,
-      colors: getModelColorFilter,
-      styles: getModelStyleFilter,
-      top: getModelTopFilter,
-      name: getModelNameFilter,
-      page: getModelPageFilter,
-      orderBy: getModelOrderBy,
-      order: getModelOrder,
-    }))
-    dispatch(setModelBrandFilter(filter))
-  }
-
   function handleSearch(searchValue) {
     dispatch(getAllModels({
-      brand: getModelBrandFilter,
+      brand: profile?.brand?.id,
       categories: getModelCategoryFilter,
       colors: getModelColorFilter,
       styles: getModelStyleFilter,
@@ -322,7 +288,7 @@ export default function ModelsPage() {
     }).then(res => {
       if (res?.data?.success) {
         toast.success(res?.data?.message)
-        dispatch(getAllModels({}))
+        dispatch(getAllModels({ brand: profile?.brand?.id }))
       }
       else {
         toast.success(res?.data?.message)
@@ -346,7 +312,7 @@ export default function ModelsPage() {
               .then(res => {
                 if (res?.data?.success) {
                   toast.success(res?.data?.message)
-                  dispatch(getAllModels({}))
+                  dispatch(getAllModels({ brand: profile?.brand?.id }))
                   dispatch(setConfirmState(false))
                   dispatch(setOpenModal(false))
                   dispatch(resetConfirmProps())
@@ -592,46 +558,6 @@ export default function ModelsPage() {
                         </SimpleSelect>
                       </FormControl>
 
-                      <FormControl sx={{ ml: '12px' }}>
-                        <SimpleSelect
-                          sx={{
-                            borderColor: '#B8B8B8',
-                            backgroundColor: '#fff',
-                            minWidth: '200px'
-                          }}
-                          onChange={handleBrandChange}
-                          paddingX={12}
-                          paddingY={6}
-                          variant='outlined'
-                          value={brand}
-                        >
-                          <MenuItem selected content='option' key={-2} value={-1}>Все бренды</MenuItem>
-                          {
-                            all__brands?.data?.brands?.map(
-                              (c, i) => (
-                                <MenuItem key={i} value={c?.id}>{c?.name}</MenuItem>
-                              )
-                            )
-                          }
-                        </SimpleSelect>
-                      </FormControl>
-
-                      <Link href='/models/addnew'>
-                        <Buttons
-                          name="Добавить модель"
-                          childrenFirst={true}
-                          type='button'
-                          className="upload__btn"
-                          sx={{ ml: '12px', height: '37px' }}
-                        >
-                          <Image
-                            alt="icon"
-                            src='/icons/plus-round-white.svg'
-                            width={20}
-                            height={20}
-                          />
-                        </Buttons>
-                      </Link>
                     </Grid>
                   </Grid>
                 </form>
@@ -695,7 +621,7 @@ export default function ModelsPage() {
                                 opacity: '1'
                               },
                               '&::after': {
-                                backgroundImage: `url(${IMAGES_BASE_URL}/${model?.cover[0]?.image_src})`,
+                                backgroundImage: `url(${IMAGES_BASE_URL}/${model?.cover?.[0]?.image_src})`,
                                 transition: 'opacity 0.3s ease',
                                 zIndex: 3000,
                                 backgroundRepeat: 'no-repeat',
@@ -716,8 +642,8 @@ export default function ModelsPage() {
                           >
                             <Image
                               src={model?.cover ? (
-                                model?.cover[0]?.image_src ? (
-                                  `${IMAGES_BASE_URL}/${model?.cover[0]?.image_src}`
+                                model?.cover?.[0]?.image_src ? (
+                                  `${IMAGES_BASE_URL}/${model?.cover?.[0]?.image_src}`
                                 ) : ''
                               ) : ''}
                               alt='Landing image'

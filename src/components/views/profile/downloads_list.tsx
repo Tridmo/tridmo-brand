@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Buttons from '../../buttons'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IMAGES_BASE_URL } from '../../../utils/image_src'
+import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import EmptyData from '../empty_data'
 import SearchInput from '../../inputs/search'
 import SimpleSelect from '../../inputs/simple_select'
@@ -307,7 +307,7 @@ export default function UserDownloadsList() {
                                     opacity: '1'
                                   },
                                   '&::after': {
-                                    backgroundImage: `url(${IMAGES_BASE_URL}/${download?.model?.cover[0]?.image_src})`,
+                                    backgroundImage: `url(${IMAGES_BASE_URL}/${download?.model?.cover?.[0]?.image_src})`,
                                     transition: 'opacity 0.3s ease',
                                     zIndex: 3000,
                                     backgroundRepeat: 'no-repeat',
@@ -328,8 +328,8 @@ export default function UserDownloadsList() {
                               >
                                 <Image
                                   src={download?.model?.cover ? (
-                                    download?.model?.cover[0]?.image_src ? (
-                                      `${IMAGES_BASE_URL}/${download?.model?.cover[0]?.image_src}`
+                                    download?.model?.cover?.[0]?.image_src ? (
+                                      `${IMAGES_BASE_URL}/${download?.model?.cover?.[0]?.image_src}`
                                     ) : ''
                                   ) : ''}
                                   alt='Landing image'

@@ -19,8 +19,9 @@ import { MonthsSelect, YearsSelect } from '../../../inputs/date_select';
 import { months } from '../../../../types/variables';
 import { useSelector } from '../../../../store';
 import { useDispatch } from 'react-redux';
-import { selectOneModel } from '../../../../data/get_one_model';
-import { getModelTagsStats, selectModelTagsStats, selectModelTagsStatsStatus } from '../../../../data/statistics/get_tags_stats';
+import { getTagsStats, selectTagsStats, selectTagsStatsStatus } from '../../../../data/statistics/get_tags_stats';
+import { selectMyProfile } from '../../../../data/me';
+import { lineChartOptions } from '../../../../types/charts.config';
 
 ChartJS.register(
   CategoryScale,
@@ -33,12 +34,12 @@ ChartJS.register(
   Legend
 );
 
-export default function ModelTagsChartComponent() {
+export default function TagsChartComponent() {
 
   const dispatch = useDispatch<any>()
-  const model = useSelector(selectOneModel)
-  const dataStatus = useSelector(selectModelTagsStatsStatus)
-  const data = useSelector(selectModelTagsStats)
+  const dataStatus = useSelector(selectTagsStatsStatus)
+  const data = useSelector(selectTagsStats)
+  const profile = useSelector(selectMyProfile)
 
   const [isMonthly, setIsMonthly] = useState<boolean>(true)
   const [selectedYear, setSelectedYear] = useState<any>(new Date().getFullYear())
@@ -46,11 +47,11 @@ export default function ModelTagsChartComponent() {
 
   function handleMonthSelect(month) {
     setSelectedMonth(month)
-    dispatch(getModelTagsStats({ year: selectedYear, month, model_id: model?.id }))
+    dispatch(getTagsStats({ year: selectedYear, month, brand_id: profile?.brand?.id }))
   }
   function handleYearSelect(year) {
     setSelectedYear(year)
-    dispatch(getModelTagsStats({ year, month: selectedMonth, model_id: model?.id }))
+    dispatch(getTagsStats({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
   }
 
   const options = {
@@ -126,14 +127,14 @@ export default function ModelTagsChartComponent() {
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />
                 :
                 <Line
                   data={{
-                    labels: Array.from({ length: data?.chart_data?.daily_tags.length }, (_, i) => i + 1), // Days 1 to 30
+                    labels: Array.from({ length: data?.chart_data?.daily_tags?.length }, (_, i) => i + 1), // Days 1 to 30
                     datasets: [
                       {
                         label: 'Ежедневные бирки',
@@ -144,7 +145,7 @@ export default function ModelTagsChartComponent() {
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />

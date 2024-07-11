@@ -47,5 +47,5 @@ const get_comments = createSlice({
 });
 
 export const reducer = get_comments.reducer;
-export const selectComments = (state: any) => state?.get_comments?.data[0]?.data?.comments
+export const selectComments = (state: any) => state?.get_comments?.data?.[0]?.data?.comments
 export default get_comments;

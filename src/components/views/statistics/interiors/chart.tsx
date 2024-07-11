@@ -21,6 +21,7 @@ import { useSelector } from '../../../../store';
 import { useDispatch } from 'react-redux';
 import { getDownloadsStats, selectDownloadsStats, selectDownloadsStatsStatus } from '../../../../data/statistics/get_downloads_stats';
 import { getInteriorsStats, selectInteriorsStats, selectInteriorsStatsStatus } from '../../../../data/statistics/get_interiors_stats';
+import { lineChartOptions } from '../../../../types/charts.config';
 
 ChartJS.register(
   CategoryScale,
@@ -51,11 +52,6 @@ export default function InteriorsChartComponent() {
     setSelectedYear(year)
     dispatch(getInteriorsStats({ year, month: selectedMonth }))
   }
-
-  const options = {
-    scales: { y: { ticks: { stepSize: 1 } } },
-    maintainAspectRatio: false,
-  };
 
   return (
     <Box
@@ -125,7 +121,7 @@ export default function InteriorsChartComponent() {
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />
@@ -143,7 +139,7 @@ export default function InteriorsChartComponent() {
                       },
                     ],
                   }}
-                  options={options}
+                  options={lineChartOptions}
                   width={'100%'}
                   height={'300px'}
                 />

@@ -9,9 +9,9 @@ const initialState = {
   progress: 0,
 };
 export const getAllModels = createAsyncThunk('/models',
-  async (wrapper?: {
+  async (wrapper: {
     name?: string;
-    brand?: string;
+    brand: string;
     top?: boolean;
     categories?: any[];
     colors?: any[];
@@ -22,11 +22,8 @@ export const getAllModels = createAsyncThunk('/models',
     page?: number;
   }) => {
     try {
-      let send__route = `/models`
+      let send__route = `/models/?brand_id=${wrapper.brand}`
 
-      if (wrapper?.brand) {
-        send__route += send__route.includes("/?") ? `&brand_id=${wrapper?.brand}` : `/?brand_id=${wrapper?.brand}`
-      }
       if (wrapper?.name) {
         send__route += send__route.includes("/?") ? `&name=${wrapper?.name}` : `/?name=${wrapper?.name}`
       }

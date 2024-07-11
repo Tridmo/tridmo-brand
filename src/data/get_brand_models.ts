@@ -76,5 +76,5 @@ const get_brand_models = createSlice({
 
 export const { resetBrandModels } = get_brand_models.actions;
 export const reducer = get_brand_models.reducer;
-export const selectBrandModels = (state: any) => state?.get_brand_models?.data[0]?.data?.models
+export const selectBrandModels = (state: any) => state?.get_brand_models?.data?.[0]?.data?.models
 export default get_brand_models;

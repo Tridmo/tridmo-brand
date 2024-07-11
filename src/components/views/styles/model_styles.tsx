@@ -8,6 +8,7 @@ import SimpleTypography from '../../typography'
 import { getAllModels } from '../../../data/get_all_models';
 import { usePathname, useRouter } from 'next/navigation'
 import { setStyleFilter } from '../../../data/handle_filters';
+import { selectMyProfile } from '../../../data/me';
 
 const SkletonData = ['', '', '', '', '', '']
 interface stylesProps {
@@ -25,8 +26,10 @@ function Style() {
   const [custom__styles, setCustom__styles] = useState<any>([]);
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
-  // ---- filters selector ----- //
 
+  const profile = useSelector(selectMyProfile)
+
+  // ---- filters selector ----- //
   const getModelCategoryFilter = useSelector((state: any) => state?.handle_filters?.categories)
   const getModelCategoryNameFilter = useSelector((state: any) => state?.handle_filters?.category_name)
   const getModelColorFilter = useSelector((state: any) => state?.handle_filters?.colors)
@@ -87,6 +90,7 @@ function Style() {
     }
     dispatch(setStyleFilter({ snex: res }))
     dispatch(getAllModels({
+      brand: profile?.brand?.id,
       categories: getModelCategoryFilter,
       colors: getModelColorFilter,
       styles: res,

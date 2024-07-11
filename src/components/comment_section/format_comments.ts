@@ -1,4 +1,4 @@
-import { IMAGES_BASE_URL } from '../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../utils/env_vars';
 
 // db
 interface User {

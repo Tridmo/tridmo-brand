@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setCategoryFilter, setColorFilter, setOrderByFilter, setStyleFilter } from '../../../data/handle_filters'
 import { getAllModels } from '../../../data/get_all_models';
 import { getAllInteriors } from '../../../data/get_all_interiors';
+import { selectMyProfile } from '../../../data/me';
 const FiltersItem = styled(Box)(
   ({ theme }: ThemeProps) => `
         background: #F5F5F5;
@@ -80,6 +81,8 @@ function Sorts({ route, ...props }) {
   const dispatch = useDispatch<any>()
   const [sorts, setSorts] = useState(sortsData);
 
+  const profile = useSelector(selectMyProfile)
+
   const getCategoryFilter = useSelector((state: any) => state?.handle_filters?.categories)
   const getStyleFilter = useSelector((state: any) => state?.handle_filters?.styles)
   const getPageFilter = useSelector((state: any) => state?.handle_filters?.page)
@@ -91,6 +94,7 @@ function Sorts({ route, ...props }) {
 
     if (route == 'models') {
       dispatch(getAllModels({
+        brand: profile?.brand?.id,
         categories: getCategoryFilter,
         styles: getStyleFilter,
         page: getPageFilter,

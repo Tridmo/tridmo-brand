@@ -15,6 +15,7 @@ import { selectAllInteriors } from '../../data/get_all_interiors';
 import EmptyData from '../views/empty_data';
 import CustomCardSkeleton from '../custom_card/skeleton';
 import { selectAuthorInteriors } from '../../data/get_author_interiors';
+import { selectModelInteriors } from '../../data/get_model_interiors';
 type InputProps = {
   route: string,
   sliced?: number,
@@ -327,6 +328,95 @@ export default function SimpleCard(props: InputProps) {
                   link={`/interiors/${model?.slug}`}
                   key={index}
                   model={model}
+                  imgHeight={props?.cardImgHeight || '268px'}
+                  withAuthor={props?.withAuthor}
+                />
+              </Grid>
+            ))
+            }
+          </Grid >
+
+          : <EmptyData />
+      )
+    }
+  }
+
+  if (props?.route == 'model_interiors') {
+
+    const all__interiors = useSelector(selectModelInteriors)
+    const all__interiors__status = useSelector((state: any) => state?.get_model_interiors?.status)
+
+    if (all__interiors__status === "failed") {
+      return (
+        <SimpleTypography text='Извините, ошибка сетевого подключения:('></SimpleTypography>
+      )
+    }
+    if (all__interiors__status === "loading") {
+      return (
+        <Grid className="models__card--wrap" container spacing={3} sx={{ width: "100%", margin: "0" }}>
+          {fakeModels?.map((model: any, index: any) => (
+            <Grid
+              className='models__card'
+              sx={{
+                [`&:not(:nth-of-type(${props?.cols}n))`]: {
+                  padding: "0 9.5px 0 0 !important",
+                },
+                [`&:nth-of-type(${props?.cols}n)`]: {
+                  padding: "0 0 0 0 !important",
+                },
+                marginBottom: "10px"
+              }}
+              key={index}
+              md={12 / props?.cols}
+              sm={12 / (props?.cols - 2)}
+              xs={12 / (props?.cols - 4)}
+              item
+            >
+              <CustomCardSkeleton
+                type={props?.route}
+                link={`/interiors`}
+                key={index}
+                model={model}
+                imgHeight={props?.cardImgHeight || '268px'}
+                tagIcon={model?.top ? '/icons/star.svg' : ''}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )
+    }
+
+    if (all__interiors__status === "succeeded") {
+
+      const data_sliced = props?.sliced ? all__interiors?.data?.interiors?.slice(0, props?.sliced) : all__interiors?.data?.interiors;
+
+      return (
+        data_sliced.length > 0 ?
+          <Grid className="models__card--wrap" container spacing={3} sx={{ width: "100%", margin: "0" }}>
+            {data_sliced?.map((model: any, index: any) => (
+              <Grid
+                className='models__card'
+                sx={{
+                  [`&:not(:nth-of-type(${props?.cols}n))`]: {
+                    padding: "0 9.5px 0 0 !important",
+                  },
+                  [`&:nth-of-type(${props?.cols}n)`]: {
+                    padding: "0 0 0 0 !important",
+                  },
+                  marginBottom: "10px"
+                }}
+                key={index}
+                md={12 / props?.cols}
+                sm={12 / (props?.cols - 2)}
+                xs={12 / (props?.cols - 4)}
+                item
+              >
+                <CustomCard
+                  type='interiors'
+                  link={`/interiors/${model?.slug}`}
+                  key={index}
+                  model={model}
+                  padding={8}
                   imgHeight={props?.cardImgHeight || '268px'}
                   withAuthor={props?.withAuthor}
                 />

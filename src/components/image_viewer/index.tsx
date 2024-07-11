@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { setShowImageViewer } from '../../data/loader'
-import { IMAGES_BASE_URL } from '../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../utils/env_vars';
 
 const SimpleImage = styled(Image)(
-    ({ theme }) => `
+  ({ theme }) => `
             position: absolute;
             inset: 0px;
             box-sizing: border-box;
@@ -25,36 +25,36 @@ const SimpleImage = styled(Image)(
 )
 
 export default function ImageViewer(image) {
-    const dispatch = useDispatch<any>()
-    const show = useSelector((state: any) => state?.loader?.show_image_viewer)
+  const dispatch = useDispatch<any>()
+  const show = useSelector((state: any) => state?.loader?.show_image_viewer)
 
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        minWidth: "720px",
-        maxWidth: "720px",
-        outline: "none",
-        overflow: "hidden"
-    }
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: "720px",
+    maxWidth: "720px",
+    outline: "none",
+    overflow: "hidden"
+  }
 
-    return (
-        <Modal
-            open={show}
-            onClose={() => { dispatch(setShowImageViewer(false)) }}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-                <SimpleImage
-                    alt=''
-                    layout='fill'
-                    sx={{ objectFit: 'contain' }}
-                    src={`${IMAGES_BASE_URL}/${image?.image_src}`}
-                    priority={true}
-                />
-            </Box>
-        </Modal>
-    )
+  return (
+    <Modal
+      open={show}
+      onClose={() => { dispatch(setShowImageViewer(false)) }}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <SimpleImage
+          alt=''
+          layout='fill'
+          sx={{ objectFit: 'contain' }}
+          src={`${IMAGES_BASE_URL}/${image?.image_src}`}
+          priority={true}
+        />
+      </Box>
+    </Modal>
+  )
 }

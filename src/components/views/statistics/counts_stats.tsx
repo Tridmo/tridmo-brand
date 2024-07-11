@@ -5,25 +5,19 @@ import { selectRegStats, selectRegStatsStatus } from "../../../data/statistics/g
 import { selectBrandsStats, selectBrandsStatsStatus } from "../../../data/statistics/get_brands_stats";
 import { selectModelsStats, selectModelsStatsStatus } from "../../../data/statistics/get_models_stats";
 import { selectCategoriesStats, selectCategoriesStatsStatus } from "../../../data/statistics/get_categories_stats";
-import { selectDownloadsStats, selectDownloadsStatsStatus } from "../../../data/statistics/get_downloads_stats";
+import { selectDownloadsCount, selectDownloadsCountStatus } from "../../../data/statistics/get_downloads_stats";
 import { selectInteriorsStats, selectInteriorsStatsStatus } from "../../../data/statistics/get_interiors_stats";
-import { selectTagsStats, selectTagsStatsStatus } from "../../../data/statistics/get_tags_stats";
+import { selectTagsCount, selectTagsCountStatus } from "../../../data/statistics/get_tags_stats";
 
 export function CountsStats() {
 
-  const regStats = useSelector(selectRegStats)
-  const brandsStats = useSelector(selectBrandsStats)
   const modelsStats = useSelector(selectModelsStats)
-  const downloadsStats = useSelector(selectDownloadsStats)
-  const interiorsStats = useSelector(selectInteriorsStats)
-  const tagsStats = useSelector(selectTagsStats)
+  const downloadsStats = useSelector(selectDownloadsCount)
+  const tagsStats = useSelector(selectTagsCount)
 
-  const regStatsStatus = useSelector(selectRegStatsStatus)
-  const brandsStatsStatus = useSelector(selectBrandsStatsStatus)
   const modelsStatsStatus = useSelector(selectModelsStatsStatus)
-  const downloadsStatsStatus = useSelector(selectDownloadsStatsStatus)
-  const interiorsStatsStatus = useSelector(selectInteriorsStatsStatus)
-  const tagsStatsStatus = useSelector(selectTagsStatsStatus)
+  const downloadsCountStatus = useSelector(selectDownloadsCountStatus)
+  const tagsCountStatus = useSelector(selectTagsCountStatus)
 
   return (
     <Box
@@ -35,22 +29,11 @@ export function CountsStats() {
         fillWidth
         mainColor="#7210BE"
         loading={
-          regStatsStatus == 'loading' ||
-          brandsStatsStatus == 'loading' ||
           modelsStatsStatus == 'loading' ||
-          downloadsStatsStatus == 'loading' ||
-          interiorsStatsStatus == 'loading' ||
-          tagsStatsStatus == 'loading'
+          downloadsCountStatus == 'loading' ||
+          tagsCountStatus == 'loading'
         }
         data={[
-          {
-            name: 'Пользователи',
-            count: regStats?.count
-          },
-          {
-            name: 'Бренды',
-            count: brandsStats?.count
-          },
           {
             name: 'Модели',
             count: modelsStats?.count,
@@ -59,10 +42,6 @@ export function CountsStats() {
           {
             name: 'Загрузки',
             count: downloadsStats?.count
-          },
-          {
-            name: 'Интерьеры',
-            count: interiorsStats?.count
           },
           {
             name: 'Бирки',

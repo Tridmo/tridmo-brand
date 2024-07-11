@@ -9,9 +9,11 @@ import ProductModal from '../../../views/model/model_modal';
 import { concatRouteCrumb, setRouteCrumbs } from '../../../../data/route_crumbs';
 import { selectOneModel } from '../../../../data/model_slider';
 import { usePathname } from 'next/navigation';
-import ModelDownloadsChartComponent from '../../../views/statistics/models/one_model_download_chart';
-import ModelTagsChartComponent from '../../../views/statistics/models/one_model_tags_chart';
 import ModelInteriorsList from '../../../views/model/model_interiors_list';
+import DownloadsAndTagsChartComponent from '../../../views/statistics/downloads_and_tags.chart';
+import ModelInteriorsGrid from '../../../views/model/model_interiors_grid';
+import ModelDownloadsAndTagsChartComponent from '../../../views/statistics/models/one_model_downloads_and_tags.chart';
+import ModelDownloadersList from '../../../views/statistics/models/one_model_downloaders_list';
 
 
 export default function OneModel() {
@@ -48,22 +50,50 @@ export default function OneModel() {
             }}
           >
             <ProductModal />
-            <ProductSlider name="slider" />
-            <ProductInfo />
-          </Grid>
 
-          <Grid container gap={2} mb={'64px'}>
-            <Grid item xs={12} lg={12} sm={12}>
-              <ModelDownloadsChartComponent />
+
+
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              lg={6}
+              xl={6}
+            >
+              <ProductSlider name="slider" sx={{ position: 'fixed' }} />
             </Grid>
 
-            <Grid item xs={12} lg={12} sm={12}>
-              <ModelTagsChartComponent />
+            <Grid
+              className="products__info"
+              item
+              xs={12}
+              sm={12}
+              md={5.5}
+              lg={5.5}
+              xl={5.5}
+              sx={{ marginTop: "20px" }}
+            >
+              <Grid container gap={2} mb={'64px'}>
+
+                <Grid item xs={12} lg={12} sm={12}>
+                  <ProductInfo />
+                </Grid>
+
+                <Grid item xs={12} lg={12} sm={12}>
+                  <ModelDownloadersList />
+                </Grid>
+
+                <Grid item xs={12} lg={12} sm={12}>
+                  <ModelDownloadsAndTagsChartComponent />
+                </Grid>
+
+                <Grid item xs={12} lg={12} sm={12}>
+                  <ModelInteriorsGrid />
+                </Grid>
+              </Grid>
             </Grid>
 
-            <Grid item xs={12} lg={12} sm={12}>
-              <ModelInteriorsList />
-            </Grid>
           </Grid>
 
 

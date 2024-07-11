@@ -53,6 +53,6 @@ const get_interiors_stats = createSlice({
 });
 
 export const reducer = get_interiors_stats.reducer;
-export const selectInteriorsStats = (state: any) => state?.get_interiors_stats?.data[0]?.data
+export const selectInteriorsStats = (state: any) => state?.get_interiors_stats?.data?.[0]?.data
 export const selectInteriorsStatsStatus = (state: any) => state?.get_interiors_stats?.status
 export default get_interiors_stats;

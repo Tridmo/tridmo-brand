@@ -8,7 +8,7 @@ import Buttons from '../../../buttons';
 import { useRouter } from 'next/navigation';
 import { sampleBrand } from '@/data/samples';
 import { selectOneBrand } from '../../../../data/get_one_brand';
-import { IMAGES_BASE_URL } from '../../../../utils/image_src';
+import { IMAGES_BASE_URL } from '../../../../utils/env_vars';
 
 
 export default function BrandInfo() {
@@ -195,7 +195,7 @@ export default function BrandInfo() {
                       />
                       <Box sx={{ marginLeft: "11px" }}>
                         <SimpleTypography className='brand__name' text="Стиль" />
-                        <SimpleTypography className='brand__box--text' text={`${brand?.styles[0]?.name}`} />
+                        <SimpleTypography className='brand__box--text' text={`${brand?.styles?.[0]?.name}`} />
                       </Box>
                     </Buttons>
                   </Box>

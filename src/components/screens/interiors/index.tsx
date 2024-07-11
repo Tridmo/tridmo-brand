@@ -27,7 +27,7 @@ export default function InteriorsPage() {
 
   useEffect(() => {
     // if(searched__modes__status === "succeeded"){
-    //   searchedInteriors[0]?.data.map((model: any, index: any) => {
+    //   searchedInteriors?.[0]?.data.map((model: any, index: any) => {
     //     console.log(model);
     //     if(model.interior){
     //       setInteriors((old:any) => [...old,model])
