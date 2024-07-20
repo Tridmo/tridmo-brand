@@ -19,6 +19,11 @@ import UserInteriorsList from '../interiors_list';
 import { selectCategoriesByUserDownloads } from '../../../../data/categories';
 import SimpleCountsList from '../simple_counts_list';
 import { selectAllBrandsByUserDownloads } from '../../../../data/get_brands_by_user_downloads';
+import { chatApi, setChatToken } from '../../../../utils/axios';
+import Cookies from 'js-cookie';
+import { selectChatToken } from '../../../../data/get_chat_token';
+import { setSelectedConversation } from '../../../../data/chat';
+import { Launch, SmsOutlined } from '@mui/icons-material';
 
 const tableWrapperSx: SxProps = {
   boxShadow: '0px 3px 4px 0px #00000014',
@@ -60,6 +65,20 @@ export default function ProfileInfo(props: ProfileProps) {
   const profileInfo = useSelector(props?.of == 'designer' ? selectDesignerProfile : selectMyProfile)
   const all__categories = useSelector(selectCategoriesByUserDownloads)
   const all__brands = useSelector(selectAllBrandsByUserDownloads)
+  const chatToken = useSelector(selectChatToken)
+
+  async function handleCreateConversation() {
+
+    setChatToken(Cookies.get('chatToken') || chatToken)
+
+    chatApi.post(`/conversations`, {
+      members: [profileInfo?.user_id]
+    })
+      .then(res => {
+        dispatch(setSelectedConversation(res?.data?.id))
+        router.push('/chat')
+      })
+  }
 
   if (getProfileStatus == 'succeeded') {
     return (
@@ -75,31 +94,63 @@ export default function ProfileInfo(props: ProfileProps) {
               <Box
                 sx={{
                   display: 'flex',
+                  justifyContent: 'space-between',
                   alignItems: 'center'
                 }}
               >
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Image
-                    width={80}
-                    height={80}
-                    alt="avatar"
-                    style={{ objectFit: "cover", margin: '0 auto', borderRadius: '50%' }}
-                    src={profileInfo?.image_src ? `${IMAGES_BASE_URL}/${profileInfo?.image_src}` : '/img/avatar.png'}
-                  />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Image
+                      width={80}
+                      height={80}
+                      alt="avatar"
+                      style={{ objectFit: "cover", margin: '0 auto', borderRadius: '50%' }}
+                      src={profileInfo?.image_src ? `${IMAGES_BASE_URL}/${profileInfo?.image_src}` : '/img/avatar.png'}
+                    />
+                  </Box>
+                  <Box ml={'8px'}>
+                    <SimpleTypography sx={{
+                      fontSize: '22px',
+                      fontWeight: '400',
+                      lineHeight: '28px',
+                    }} text={profileInfo?.full_name} />
+                    <SimpleTypography sx={{
+                      color: '#888',
+                      fontSize: '20px',
+                      fontWeight: '400',
+                      lineHeight: '28px',
+                    }} text={profileInfo?.username} />
+                  </Box>
                 </Box>
-                <Box ml={'8px'}>
-                  <SimpleTypography sx={{
-                    fontSize: '22px',
-                    fontWeight: '400',
-                    lineHeight: '28px',
-                  }} text={profileInfo?.full_name} />
-                  <SimpleTypography sx={{
-                    color: '#888',
-                    fontSize: '20px',
-                    fontWeight: '400',
-                    lineHeight: '28px',
-                  }} text={profileInfo?.username} />
+
+                <Box>
+                  <Link target='_blank' href={`https://demod.uz/designers/${profileInfo?.username}`}>
+                    <Buttons
+                      sx={{ padding: '10px !important', mr: '8px' }}
+                      className='bookmark__btn'
+                      name="Посмотреть профиль"
+                      childrenFirst={true}
+                    >
+                      <Launch sx={{ width: '19px', height: '19px', mr: '8px' }} />
+                    </Buttons>
+                  </Link>
+                  <Buttons
+                    onClick={() => handleCreateConversation()}
+                    sx={{ padding: '10px !important' }}
+                    className='login__btn'
+                    name="Написать сообщение"
+                    childrenFirst={true}
+                  >
+                    <SmsOutlined sx={{ width: '20px', height: '20px', mr: '8px' }} />
+                  </Buttons>
                 </Box>
+
               </Box>
             </Grid>
 

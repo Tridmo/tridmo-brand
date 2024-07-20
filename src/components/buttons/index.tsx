@@ -152,10 +152,10 @@ const ButtonWrapper = styled(Button)(
       }
 
       &.MuiButton-login__btn {
-        height:40px;
         color:white;
         background-color: ${theme.colors.gray[900]};
         padding:0 20px ;
+        border: 1.7px solid ${theme.colors.gray[900]};
         border-radius:4px;
         
         &:hover{
@@ -390,7 +390,7 @@ const ButtonWrapper = styled(Button)(
         }
       }
 
-      &.MuiButton-bookmar__btn{
+      &.MuiButton-bookmark__btn{
         padding:9px 12px;
         color: #303030;
         background-color: #fff;
