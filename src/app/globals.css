@@ -70,6 +70,10 @@
   }
 } */
 
+::part(wy-conversation-new) {
+  display: none;
+}
+
 html,
 body {
   padding: 0;

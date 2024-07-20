@@ -12,8 +12,8 @@ const initialState = {
 export const getDesignerDownloads = createAsyncThunk('/users/:username/downloads',
   async (wrapper: {
     username: string;
+    brand: string;
     name?: string;
-    brand?: string;
     top?: boolean;
     categories?: any[];
     limit?: number;

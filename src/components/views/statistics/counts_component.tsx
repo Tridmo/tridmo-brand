@@ -37,7 +37,7 @@ export default function CountsGrid({ data, sx, loading, fullWidth, fillWidth, ma
               sm={fullWidth ? 12 : fillWidth}
               key={ind}
               sx={{
-                p: '20px 24px',
+                p: '16px 20px',
                 bgcolor: '#fff',
                 boxShadow: '0px 3px 4px 0px #00000014',
                 borderRadius: '4px',
@@ -50,6 +50,11 @@ export default function CountsGrid({ data, sx, loading, fullWidth, fillWidth, ma
               >
                 <SimpleTypography
                   text={elem?.name}
+                  className='ellipsis__text'
+                  sx={{
+                    fontSize: '16px',
+                    fontWeight: 400,
+                  }}
                 />
                 <SimpleTypography
                   sx={{

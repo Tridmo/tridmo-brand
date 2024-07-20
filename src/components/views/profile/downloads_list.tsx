@@ -18,6 +18,7 @@ import { set_downloaded_model_brand, set_downloaded_model_categories, set_downlo
 import { selectAllBrandsByUserDownloads } from '../../../data/get_brands_by_user_downloads'
 import { getDesignerDownloads, selectDesignerDownloads } from '../../../data/get_designer_downloads'
 import { selectDesignerProfile } from '../../../data/get_designer'
+import { selectMyProfile } from '../../../data/me'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -88,10 +89,12 @@ const listSx: SxProps = {
 const widthControl = {
 
   '&:nth-of-type(1)': {
-    minWidth: '517px',
+    minWidth: '50%',
+    maxWidth: '50%',
   },
   '&:nth-of-type(2)': {
-    minWidth: '180px',
+    minWidth: '50%',
+    maxWidth: '50%',
   },
   '&:nth-of-type(3)': {
     minWidth: '180px',
@@ -112,6 +115,7 @@ export default function UserDownloadsList() {
   const dispatch = useDispatch<any>();
 
   const profileInfo = useSelector(selectDesignerProfile)
+  const myProfile = useSelector(selectMyProfile)
   const all__downloads_status = useSelector((state: any) => state?.get_designer_downloads?.status)
 
   const get_downloaded_model_brand = useSelector((state: any) => state?.handle_filters?.downloaded_model_brand)
@@ -134,7 +138,7 @@ export default function UserDownloadsList() {
     dispatch(getDesignerDownloads({
       username: profileInfo?.username,
       categories: filter,
-      brand: get_downloaded_model_brand,
+      brand: myProfile?.brand?.id,
       name: get_downloaded_model_name,
       page: get_downloaded_model_page,
       orderBy: get_downloaded_model_orderby,
@@ -143,25 +147,10 @@ export default function UserDownloadsList() {
     dispatch(set_downloaded_model_categories(filter))
   }
 
-  function handleBrandChange(e) {
-    setBrandId(e.target.value)
-    const filter = e.target.value == -1 ? '' : e.target.value;
-    dispatch(getDesignerDownloads({
-      username: profileInfo?.username,
-      brand: filter,
-      categories: get_downloaded_model_categories,
-      name: get_downloaded_model_name,
-      page: get_downloaded_model_page,
-      orderBy: get_downloaded_model_orderby,
-      order: get_downloaded_model_order,
-    }))
-    dispatch(set_downloaded_model_brand(filter))
-  }
-
   function handleSearch(searchValue) {
     dispatch(getDesignerDownloads({
       username: profileInfo?.username,
-      brand: get_downloaded_model_brand,
+      brand: myProfile?.brand?.id,
       categories: get_downloaded_model_categories,
       name: searchValue,
       page: get_downloaded_model_page,
@@ -233,29 +222,6 @@ export default function UserDownloadsList() {
                     </SimpleSelect>
                   </FormControl>
 
-                  <FormControl sx={{ ml: '12px' }}>
-                    <SimpleSelect
-                      sx={{
-                        borderColor: '#B8B8B8',
-                        backgroundColor: '#fff',
-                        minWidth: '200px'
-                      }}
-                      onChange={handleBrandChange}
-                      paddingX={12}
-                      paddingY={6}
-                      variant='outlined'
-                      value={brand}
-                    >
-                      <MenuItem selected content='option' key={-2} value={-1}>Все бренды</MenuItem>
-                      {
-                        all__brands?.data?.brands?.map(
-                          (c, i) => (
-                            <MenuItem key={i} value={c?.id}>{c?.name}</MenuItem>
-                          )
-                        )
-                      }
-                    </SimpleSelect>
-                  </FormControl>
                 </Grid>
               </Grid>
             </ListItem>
@@ -266,10 +232,6 @@ export default function UserDownloadsList() {
             >
               <SimpleTypography
                 text='Модель'
-                sx={{ ...liHeaderTextSx, ...widthControl }}
-              />
-              <SimpleTypography
-                text='Бренд'
                 sx={{ ...liHeaderTextSx, ...widthControl }}
               />
               <SimpleTypography
@@ -371,22 +333,6 @@ export default function UserDownloadsList() {
                               sx={{ ...widthControl, ...itemAsLink }}
                             >
                               <SimpleTypography
-                                text={download?.model?.brand?.name}
-                                sx={{
-                                  fontSize: '14px',
-                                  fontWeight: 400,
-                                  lineHeight: '26px',
-                                  letterSpacing: '-0.02em',
-                                  textAlign: 'start',
-                                }}
-                              />
-                            </ListItemText>
-
-                            <ListItemText title='Нажмите, чтобы открыть'
-
-                              sx={{ ...widthControl, ...itemAsLink }}
-                            >
-                              <SimpleTypography
                                 text={download?.model?.category?.name || 'Category'}
                                 sx={{
                                   fontSize: '14px',
@@ -456,14 +402,6 @@ export default function UserDownloadsList() {
                           </ListItemText>
 
                           <ListItemText sx={{ ...widthControl }} >
-                            <Skeleton
-                              variant="rectangular"
-                              width={56}
-                              height={20}
-                            />
-                          </ListItemText>
-
-                          <ListItemText sx={{ ...widthControl }}>
                             <Skeleton
                               variant="rectangular"
                               width={56}

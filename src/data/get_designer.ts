@@ -8,8 +8,13 @@ const initialState = {
   error: null,
   progress: 0,
 };
-export const getDesignerProfile = createAsyncThunk('/users/:username/info', async (username: string) => {
-  const response = await api.get(`users/${username}/info`)
+export const getDesignerProfile = createAsyncThunk('/users/:username/info', async (
+  wrapper: {
+    username: string;
+    brand: string;
+  }
+) => {
+  const response = await api.get(`users/${wrapper.username}/info/?downloads_from_brand=${wrapper.brand}`)
   return response.data
 })
 

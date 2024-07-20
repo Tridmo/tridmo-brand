@@ -6,11 +6,14 @@
     "dev": "next dev -p 3040",
     "build": "next build",
     "start": "next start -p 3040",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lit:extract": "npx lit-localize extract",
+    "lit:build": "npx lit-localize build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@lit/localize": "^0.12.1",
     "@mui/icons-material": "^5.15.14",
     "@mui/lab": "^5.0.0-alpha.166",
     "@mui/material": "^5.15.11",
@@ -19,7 +22,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@reduxjs/toolkit": "^2.2.1",
     "@szhsin/react-menu": "^4.1.0",
-    "@weavy/uikit-react": "^23.2.1",
+    "@weavy/uikit-react": "^24.0.1",
     "axios": "^1.6.7",
     "chart.js": "^4.4.3",
     "class-variance-authority": "^0.7.0",
@@ -45,6 +48,7 @@
     "react-countdown": "^2.3.5",
     "react-dom": "^18",
     "react-draft-wysiwyg": "^1.15.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-lazy-load-image-component": "^1.6.0",
     "react-loading-skeleton": "^3.4.0",
     "react-redux": "^9.1.0",
@@ -63,8 +67,10 @@
     "yup": "^1.3.3"
   },
   "devDependencies": {
+    "@lit/localize-tools": "^0.7.2",
     "@types/chart.js": "^2.9.41",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash.throttle": "^4.1.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-chartjs-2": "^2.5.7",

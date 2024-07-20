@@ -10,9 +10,14 @@ const initialState = {
 export const getAuthorInteriors = createAsyncThunk('/interiors/:author',
   async (wrapper?: {
     author: string;
+    brand: string;
     [x: string]: any
   }) => {
     let send__route = `/interiors`
+
+    if (wrapper?.brand) {
+      send__route += send__route.includes("/?") ? `&has_models_of_brand=${wrapper?.brand}` : `/?has_models_of_brand=${wrapper?.brand}`
+    }
 
     wrapper?.style_id?.forEach(style_id => {
       send__route += !send__route.includes("/?") ? `/?styles=${style_id}` : `&styles=${style_id}`;

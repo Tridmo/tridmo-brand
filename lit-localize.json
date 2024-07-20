@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/lit/lit/main/packages/localize-tools/config.schema.json",
+  "tsConfig": "node_modules/@weavy/uikit-web/tsconfig.json",
+  "sourceLocale": "en",
+  "targetLocales": [
+    "ru-RU"
+  ],
+  "output": {
+    "mode": "runtime",
+    "language": "ts",
+    "outputDir": "./src/chat_locales/locales/"
+  },
+  "interchange": {
+    "format": "xliff",
+    "xliffDir": "./src/chat_locales/xliff/"
+  }
+}

@@ -19,7 +19,7 @@ import { MonthsSelect, YearsSelect } from '../../../inputs/date_select';
 import { months } from '../../../../types/variables';
 import { useSelector } from '../../../../store';
 import { useDispatch } from 'react-redux';
-import { getDownloadsStats, selectDownloadsStats, selectDownloadsStatsStatus } from '../../../../data/statistics/get_downloads_stats';
+import { getDownloadsChart, selectDownloadsChart, selectDownloadsChartStatus } from '../../../../data/statistics/get_downloads_stats';
 import { selectMyProfile } from '../../../../data/me';
 import { lineChartOptions } from '../../../../types/charts.config';
 
@@ -37,8 +37,8 @@ ChartJS.register(
 export default function DownloadsChartComponent() {
 
   const dispatch = useDispatch<any>()
-  const dataStatus = useSelector(selectDownloadsStatsStatus)
-  const data = useSelector(selectDownloadsStats)
+  const dataStatus = useSelector(selectDownloadsChartStatus)
+  const data = useSelector(selectDownloadsChart)
   const profile = useSelector(selectMyProfile)
 
   const [isMonthly, setIsMonthly] = useState<boolean>(true)
@@ -47,11 +47,11 @@ export default function DownloadsChartComponent() {
 
   function handleMonthSelect(month) {
     setSelectedMonth(month)
-    dispatch(getDownloadsStats({ year: selectedYear, month, brand_id: profile?.brand?.id }))
+    dispatch(getDownloadsChart({ year: selectedYear, month, brand_id: profile?.brand?.id }))
   }
   function handleYearSelect(year) {
     setSelectedYear(year)
-    dispatch(getDownloadsStats({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
+    dispatch(getDownloadsChart({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
   }
 
   return (

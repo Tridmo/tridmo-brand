@@ -66,12 +66,13 @@ export default function DownloadsAndTagsChartComponent({ title }: Props) {
   return (
     <Box
       sx={{
+        height: '100%',
         width: '100%',
         bgcolor: '#fff',
         p: '24px',
-        boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.1)',
-        // boxShadow: '0px 3px 4px 0px #00000014',
-        borderRadius: '12px',
+        // boxShadow: '0px 1px 3px 0px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0px 3px 4px 0px #00000014',
+        borderRadius: '4px',
       }}
     >
       <h3 style={{ marginTop: 0 }}>{title || 'Статистика'}</h3>

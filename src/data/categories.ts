@@ -33,10 +33,14 @@ export const getCategoriesWithModelCount = createAsyncThunk('/catgories/?models_
   const response = await api.get(`/categories/main/?models_count=true&orderBy=name&order=asc`)
   return response.data
 })
-export const getCategoriesByUserDownloads = createAsyncThunk('/catgories/user/downloads/:username', async (username: string) => {
-  const response = await api.get(`/categories/user/downloads/${username}/?orderBy=name&order=asc`)
-  return response.data
-})
+export const getCategoriesByUserDownloads = createAsyncThunk('/catgories/user/downloads/:username',
+  async (wrapper: {
+    username: string;
+    brand: string;
+  }) => {
+    const response = await api.get(`/categories/user/downloads/${wrapper.username}/?brand_id=${wrapper.brand}&orderBy=name&order=asc`)
+    return response.data
+  })
 export const getCategoriesByUserInteriors = createAsyncThunk('/catgories/user/interiors/:username', async (username: string) => {
   const response = await api.get(`/categories/user/interiors/${username}/?orderBy=name&order=asc`)
   return response.data
@@ -49,10 +53,16 @@ export const getInteriorCategories = createAsyncThunk('/interior/categories', as
   const response = await api.get(`/categories/main/?type=interior`)
   return response.data
 })
-export const getBrandCategories = createAsyncThunk('/brand/categories', async (brand_id: string) => {
-  const response = await api.get(`/categories/brand/${brand_id}`)
-  return response.data
-})
+export const getBrandCategories = createAsyncThunk('/brand/categories',
+  async (
+    wrapper: {
+      brand_id: string,
+      downloads_count?: boolean
+    }
+  ) => {
+    const response = await api.get(`/categories/brand/${wrapper.brand_id}/?downloads_count=${wrapper.downloads_count}`)
+    return response.data
+  })
 export const getModelTagsCategories = createAsyncThunk('/model_tags/categories', async (model_id: string) => {
   const response = await api.get(`/categories/model_tags/${model_id}`)
   return response.data
@@ -227,6 +237,8 @@ export const selectModelCategories = (state: any) => state?.categories?.model_da
 export const selectInteriorCategories = (state: any) => state?.categories?.interior_data?.[0]?.data
 export const selectBrandCategories = (state: any) => state?.categories?.brand_data?.[0]?.data
 export const selectModelTagsCategories = (state: any) => state?.categories?.model_tags_data?.[0]?.data
+
+export const selectBrandCategoriesStatus = (state: any) => state?.categories?.brand_status
 
 export const reducer = categories.reducer;
 export default categories

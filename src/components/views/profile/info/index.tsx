@@ -171,12 +171,6 @@ export default function ProfileInfo(props: ProfileProps) {
                 },
               ]}
             />
-
-            <SimpleCountsList
-              header='Кол-во загрузок по брендам'
-              data={all__brands?.data?.brands?.map(e => { return { name: e?.name, count: e?.downloads_count } })}
-            />
-
             <SimpleCountsList
               header='Кол-во загрузок по категориям'
               data={all__categories?.map(e => { return { name: e?.name, count: e?.downloads_count } })}

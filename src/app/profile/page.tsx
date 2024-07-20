@@ -61,7 +61,7 @@ export default function UserProfile() {
 
   React.useEffect(() => {
     if (profile) {
-      dispatch(getAuthorInteriors({ author: profile?.username }))
+      // dispatch(getAuthorInteriors({ author: profile?.username, brand: profile?.brand?.id }))
     }
   }, [profile])
 

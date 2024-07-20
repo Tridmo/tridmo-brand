@@ -1,9 +1,8 @@
 "use client"
 import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoginState, setSignupState, setVerifyState, setOpenModal } from '@/data/modal_checker';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -13,19 +12,19 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Buttons from '../../buttons';
 import { selectMyProfile } from '@/data/me'
-import { CircularProgress, Divider, IconButton } from '@mui/material';
-import SearchInput from '../../inputs/search';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-// import { searchModels } from 'src/data/search_model';
 import SimpleTypography from '../../typography';
 import { ThemeProps } from '@/types/theme';
 import Link from 'next/link';
 import BasicModal from '@/components/modals/modal';
-import { switch_on } from '../../../data/toggle_cart';
+import { selectToggleCardActionStatus, switch_on } from '../../../data/toggle_cart';
 import { setAuthState } from '../../../data/login';
 import Cookies from 'js-cookie'
-import { IMAGES_BASE_URL } from '../../../utils/env_vars';
+import { CHAT_SERVER_URL, IMAGES_BASE_URL } from '../../../utils/env_vars';
 import RouteCrumbs from './route_crumbs';
+import { WyNotificationButtonList, WyNotifications, useWeavy } from '@weavy/uikit-react';
+import { tokenFactory } from '../../../utils/chat';
+import { ChatOutlined } from '@mui/icons-material';
+import { selectNotifications } from '../../../data/get_notifications';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -58,24 +57,14 @@ const DropDown = styled(Menu)(
 
 
 export default function NavbarTop() {
-
-  const isAuthenticated = useSelector((state: any) => state?.auth_slicer?.authState)
-  const routeCrumbs = useSelector((state: any) => state?.route_crumbs)
-  const userData = useSelector(selectMyProfile)
-  const [searchClicked, setSearchClicked] = useState(false)
-  const [searchVal, setSearchVal] = useState("")
-
   const router = useRouter();
   const pathname = usePathname();
-
-
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch<any>();
+  const x = useSelector(selectToggleCardActionStatus)
 
-  // useEffect(() => {
-  //     setIsAuthenticated(authState);
-  // }, [authState]);
+  const notifications = useSelector(selectNotifications)
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -93,27 +82,8 @@ export default function NavbarTop() {
     setAnchorEl(null);
   }
 
-  function SearchModel(e: any) {
-    e.preventDefault()
-    router.push(`/models?keyword=${searchVal}`)
-    // dispatch(searchModels(val))
-  }
-
   const openRightBar = () => {
     dispatch(switch_on(true))
-
-    // if (router.pathname === '/models' || router.pathname === '/interiors') {
-    //     router.push({
-    //         query: {
-    //             page: getModelPageFilter,
-    //             isOpen: true,
-    //             colors: getModelColorFilter,
-    //             styles: getModelStyleFilter,
-    //             category_name: getModelCategoryNameFilter,
-    //             category: getModelCategoryFilter,
-    //         },
-    //     });
-    // }
   }
 
   return (
@@ -199,6 +169,26 @@ export default function NavbarTop() {
               }}
               className="header__actions"
             >
+
+              <IconButton
+                onClick={openRightBar}
+                aria-label="menu"
+                sx={{ marginRight: "16px", backgroundColor: false ? 'rgba(0, 0, 0, 0.04)' : 'transparent' }}
+              >
+                <Image
+                  src="/icons/bell-icon.svg"
+                  alt='Bell'
+                  width={21}
+                  height={21}
+                ></Image>
+              </IconButton>
+              <Link href={'/chat'}>
+                <IconButton
+                  sx={{ marginRight: "16px", }}
+                >
+                  <ChatOutlined htmlColor='#424242' />
+                </IconButton>
+              </Link>
 
               <Box
                 onClick={handleClick}

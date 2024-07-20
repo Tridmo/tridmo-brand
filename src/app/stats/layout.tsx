@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from "@/components/views/navbar"
+import RightBar from '../../components/right_bar';
 
 export default function StatsLayout({
   children,
@@ -9,6 +10,7 @@ export default function StatsLayout({
   return (
     <>
       <Navbar />
+      <RightBar />
       <section className='body_wrapper_section'>
         {children}
       </section>

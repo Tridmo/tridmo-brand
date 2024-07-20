@@ -228,6 +228,7 @@ export default function BasicPagination({ dataSource, dataId, count, page, ...pr
       dispatch(getAuthorInteriors({
         author: dataId,
         page: page,
+        brand: profile?.brand?.id,
         categories: get_author_interiors_categories,
         orderBy: get_author_interiors_orderby,
         order: get_author_interiors_order,

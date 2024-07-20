@@ -6,6 +6,9 @@ import AlertWrapper from '../components/alert';
 import { Box } from '@mui/material';
 import BasicModal from '../components/modals/modal';
 import "./globals.css";
+import { WyNotifications, useWeavy } from '@weavy/uikit-react';
+import { CHAT_SERVER_URL } from '../utils/env_vars';
+import { tokenFactory } from '../utils/chat';
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -17,6 +20,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={inter.className}>

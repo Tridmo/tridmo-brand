@@ -25,6 +25,7 @@ import { selectAllBrandsByUserDownloads } from '../../../data/get_brands_by_user
 import { getDesignerDownloads, selectDesignerDownloads } from '../../../data/get_designer_downloads'
 import { selectDesignerProfile } from '../../../data/get_designer'
 import { getAuthorInteriors, selectAuthorInteriors } from '../../../data/get_author_interiors'
+import { selectMyProfile } from '../../../data/me'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -130,29 +131,17 @@ export default function UserInteriorsList() {
   const dispatch = useDispatch<any>();
 
   const profileInfo = useSelector(selectDesignerProfile)
+  const myProfile = useSelector(selectMyProfile)
   const all__interiors_status = useSelector((state: any) => state?.get_author_interiors?.status)
   const all__interiors = useSelector(selectAuthorInteriors)
   const all__categories = useSelector(selectCategoriesByUserInteriors)
 
-  const get_author_interiors_categories = useSelector((state: any) => state?.handle_filters?.author_interiors_categories)
-  const get_author_interiors_orderby = useSelector((state: any) => state?.handle_filters?.author_interiors_orderby)
-  const get_author_interiors_order = useSelector((state: any) => state?.handle_filters?.author_interiors_order)
-  const get_designer_interiors_page = useSelector((state: any) => state?.handle_filters?.designer_interiors_page)
+  // const get_author_interiors_categories = useSelector((state: any) => state?.handle_filters?.author_interiors_categories)
+  // const get_author_interiors_orderby = useSelector((state: any) => state?.handle_filters?.author_interiors_orderby)
+  // const get_author_interiors_order = useSelector((state: any) => state?.handle_filters?.author_interiors_order)
+  // const get_designer_interiors_page = useSelector((state: any) => state?.handle_filters?.designer_interiors_page)
 
-  const [category, setCategoryId] = useState<number>(-1)
-
-  function handleCategoryChange(e) {
-    setCategoryId(Number(e.target.value))
-    const filter = e.target.value == -1 ? [] : [e.target.value];
-    dispatch(getAuthorInteriors({
-      author: profileInfo?.username,
-      categories: filter,
-      page: get_designer_interiors_page,
-      orderBy: get_author_interiors_orderby,
-      order: get_author_interiors_order,
-    }))
-    dispatch(set_author_interiors_categories(filter))
-  }
+  // const [category, setCategoryId] = useState<number>(-1)
 
   return (
     <Grid spacing={2} container sx={{ width: '100%', marginTop: "32px", marginLeft: 0 }} >
@@ -166,40 +155,7 @@ export default function UserInteriorsList() {
               key={-3}
               sx={{ ...liHeaderSx, borderRadius: '4px' }}
             >
-              <h3 style={{ margin: 0 }}>Интерьеры</h3>
-            </ListItem>
-
-            <ListItem alignItems="center"
-              key={-2}
-              sx={liHeaderSx}
-            >
-              <Grid width={'100%'} container justifyContent={'flex-end'}>
-                <Grid item>
-                  <FormControl>
-                    <SimpleSelect
-                      sx={{
-                        borderColor: '#B8B8B8',
-                        backgroundColor: '#fff',
-                        minWidth: '200px'
-                      }}
-                      onChange={handleCategoryChange}
-                      paddingX={12}
-                      paddingY={6}
-                      variant='outlined'
-                      value={category}
-                    >
-                      <MenuItem selected content='option' key={-2} value={-1}>Все категории</MenuItem>
-                      {
-                        all__categories?.map(
-                          (c, i) => (
-                            <MenuItem key={i} value={c?.id}>{c?.name}</MenuItem>
-                          )
-                        )
-                      }
-                    </SimpleSelect>
-                  </FormControl>
-                </Grid>
-              </Grid>
+              <h3 style={{ margin: 0 }}>{`Интерьеры с бирками моделей бренда «${myProfile?.brand?.name}»`}</h3>
             </ListItem>
 
             <ListItem alignItems="center"

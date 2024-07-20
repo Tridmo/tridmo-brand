@@ -21,6 +21,7 @@ import {
   getDownloadsCount, selectDownloadsCount, selectDownloadsCountStatus,
   getDownloadsChart, selectDownloadsChart, selectDownloadsChartStatus
 } from '../../data/statistics/get_downloads_stats';
+import { getBrandCategories } from '../../data/categories';
 
 declare global {
   interface Window {
@@ -53,6 +54,7 @@ export default function StatsPage() {
   const interiorsStatsStatus = useSelector(selectInteriorsStatsStatus)
   const tagsCountStatus = useSelector(selectTagsCountStatus)
   const tagsChartStatus = useSelector(selectTagsChartStatus)
+  const brandCategoriesStatus = useSelector(selectBrandsStatsStatus)
 
   const { year, month, week } = currentDate()
 
@@ -63,6 +65,9 @@ export default function StatsPage() {
       }
       if (downloadsChartStatus == 'idle') {
         dispatch(getDownloadsChart({ month, year, brand_id: profile?.brand?.id }))
+      }
+      if (brandCategoriesStatus == 'idle') {
+        dispatch(getBrandCategories({ brand_id: profile?.brand?.id, downloads_count: true }))
       }
       if (tagsCountStatus == 'idle') {
         dispatch(getTagsCount({ month, year, brand_id: profile?.brand?.id }))
@@ -88,6 +93,7 @@ export default function StatsPage() {
     interiorsStatsStatus,
     tagsCountStatus,
     tagsChartStatus,
+    brandCategoriesStatus,
   ])
 
   return (

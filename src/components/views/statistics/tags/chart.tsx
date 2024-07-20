@@ -19,7 +19,7 @@ import { MonthsSelect, YearsSelect } from '../../../inputs/date_select';
 import { months } from '../../../../types/variables';
 import { useSelector } from '../../../../store';
 import { useDispatch } from 'react-redux';
-import { getTagsStats, selectTagsStats, selectTagsStatsStatus } from '../../../../data/statistics/get_tags_stats';
+import { getTagsChart, selectTagsChart, selectTagsChartStatus } from '../../../../data/statistics/get_tags_stats';
 import { selectMyProfile } from '../../../../data/me';
 import { lineChartOptions } from '../../../../types/charts.config';
 
@@ -37,8 +37,8 @@ ChartJS.register(
 export default function TagsChartComponent() {
 
   const dispatch = useDispatch<any>()
-  const dataStatus = useSelector(selectTagsStatsStatus)
-  const data = useSelector(selectTagsStats)
+  const dataStatus = useSelector(selectTagsChartStatus)
+  const data = useSelector(selectTagsChart)
   const profile = useSelector(selectMyProfile)
 
   const [isMonthly, setIsMonthly] = useState<boolean>(true)
@@ -47,11 +47,11 @@ export default function TagsChartComponent() {
 
   function handleMonthSelect(month) {
     setSelectedMonth(month)
-    dispatch(getTagsStats({ year: selectedYear, month, brand_id: profile?.brand?.id }))
+    dispatch(getTagsChart({ year: selectedYear, month, brand_id: profile?.brand?.id }))
   }
   function handleYearSelect(year) {
     setSelectedYear(year)
-    dispatch(getTagsStats({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
+    dispatch(getTagsChart({ year, month: selectedMonth, brand_id: profile?.brand?.id }))
   }
 
   const options = {

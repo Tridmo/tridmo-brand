@@ -35,9 +35,20 @@ export function CountsStats() {
         }
         data={[
           {
-            name: 'Модели',
+            name: 'Все модели',
             count: modelsStats?.count,
-            secondary_text: `Доступно: ${modelsStats?.available_count || ""} \nНе доступно: ${modelsStats?.unavailable_count || ""}`,
+          },
+          {
+            name: 'Доступные модели',
+            count: modelsStats?.available_count,
+          },
+          {
+            name: 'Недоступные модели',
+            count: modelsStats?.unavailable_count,
+          },
+          {
+            name: 'Модели под заказ',
+            count: modelsStats?.by_ordering_count,
           },
           {
             name: 'Загрузки',
