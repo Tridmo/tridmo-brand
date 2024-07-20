@@ -282,60 +282,60 @@ export default function ModelsPage() {
     dispatch(setModelNameFilter(searchValue))
   }
 
-  function handleChangeTop() {
-    instance.put(`models/${selectedModel?.id}`, {
-      top: !selectedModel?.top
-    }).then(res => {
-      if (res?.data?.success) {
-        toast.success(res?.data?.message)
-        dispatch(getAllModels({ brand: profile?.brand?.id }))
-      }
-      else {
-        toast.success(res?.data?.message)
-      }
-    }).catch(err => {
-      toast.error(err?.response?.data?.message)
-    }).finally(() => {
-      handleClose();
-    })
-  };
+  // function handleChangeTop() {
+  //   instance.put(`models/${selectedModel?.id}`, {
+  //     top: !selectedModel?.top
+  //   }).then(res => {
+  //     if (res?.data?.success) {
+  //       toast.success(res?.data?.message)
+  //       dispatch(getAllModels({ brand: profile?.brand?.id }))
+  //     }
+  //     else {
+  //       toast.success(res?.data?.message)
+  //     }
+  //   }).catch(err => {
+  //     toast.error(err?.response?.data?.message)
+  //   }).finally(() => {
+  //     handleClose();
+  //   })
+  // };
 
-  function handleClickDelete() {
-    const modalContent: ConfirmContextProps = {
-      message: `Вы уверены, что хотите удалить модель «${selectedModel?.name}»?`,
-      actions: {
-        on_click: {
-          args: [selectedModel?.id],
-          func: async (checked: boolean, id: number) => {
-            dispatch(setConfirmProps({ is_loading: true }))
-            instance.delete(`models/${id}`)
-              .then(res => {
-                if (res?.data?.success) {
-                  toast.success(res?.data?.message)
-                  dispatch(getAllModels({ brand: profile?.brand?.id }))
-                  dispatch(setConfirmState(false))
-                  dispatch(setOpenModal(false))
-                  dispatch(resetConfirmProps())
-                  dispatch(resetConfirmData())
-                }
-                else {
-                  toast.success(res?.data?.message)
-                }
-              }).catch(err => {
-                toast.error(err?.response?.data?.message)
-              }).finally(() => {
-                dispatch(setConfirmProps({ is_loading: false }))
-                handleClose();
-              })
-          }
-        }
-      }
-    }
-    dispatch(resetConfirmProps())
-    dispatch(setConfirmProps(modalContent))
-    dispatch(setConfirmState(true))
-    dispatch(setOpenModal(true))
-  }
+  // function handleClickDelete() {
+  //   const modalContent: ConfirmContextProps = {
+  //     message: `Вы уверены, что хотите удалить модель «${selectedModel?.name}»?`,
+  //     actions: {
+  //       on_click: {
+  //         args: [selectedModel?.id],
+  //         func: async (checked: boolean, id: number) => {
+  //           dispatch(setConfirmProps({ is_loading: true }))
+  //           instance.delete(`models/${id}`)
+  //             .then(res => {
+  //               if (res?.data?.success) {
+  //                 toast.success(res?.data?.message)
+  //                 dispatch(getAllModels({ brand: profile?.brand?.id }))
+  //                 dispatch(setConfirmState(false))
+  //                 dispatch(setOpenModal(false))
+  //                 dispatch(resetConfirmProps())
+  //                 dispatch(resetConfirmData())
+  //               }
+  //               else {
+  //                 toast.success(res?.data?.message)
+  //               }
+  //             }).catch(err => {
+  //               toast.error(err?.response?.data?.message)
+  //             }).finally(() => {
+  //               dispatch(setConfirmProps({ is_loading: false }))
+  //               handleClose();
+  //             })
+  //         }
+  //       }
+  //     }
+  //   }
+  //   dispatch(resetConfirmProps())
+  //   dispatch(setConfirmProps(modalContent))
+  //   dispatch(setConfirmState(true))
+  //   dispatch(setOpenModal(true))
+  // }
 
   return (
     <Box sx={{ width: '1268px', minHeight: 760, display: "block", margin: "0 auto" }}>
@@ -370,7 +370,7 @@ export default function ModelsPage() {
           </Link>
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={handleChangeTop}
           sx={{ padding: "6px 12px" }}
         >
@@ -381,9 +381,9 @@ export default function ModelsPage() {
             height={17}
           />
           <SimpleTypography className='drow-down__text' text={selectedModel?.top ? 'Удалить из ТОПа' : 'Поднять в ТОП'} />
-        </MenuItem>
+        </MenuItem> */}
 
-        <MenuItem
+        {/* <MenuItem
           onClick={handleClickDelete}
           sx={{ padding: "6px 12px" }}
         >
@@ -395,7 +395,7 @@ export default function ModelsPage() {
           />
           <SimpleTypography className='drow-down__text' text='Удалить' />
 
-        </MenuItem>
+        </MenuItem> */}
 
       </DropDown>
 
