@@ -107,10 +107,12 @@ export const LoginContext = (props: LoginContextProps) => {
             await dispatch(getMyProfile({ Authorization: `Bearer ${accessToken}` }));
             await dispatch(setAuthState(true));
 
-            router.push('/');
-
             setStatus({ success: true });
             setSubmitting(false);
+
+            router.refresh();
+            router.push('/stats');
+
           } catch (err: any) {
             setStatus({ success: false });
             setErrors({ submit: err.message });
