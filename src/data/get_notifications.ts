@@ -53,6 +53,6 @@ const get_notifications = createSlice({
 });
 
 export const reducer = get_notifications.reducer;
-export const selectNotifications = (state: any) => state?.get_notifications?.data[0]
+export const selectNotifications = (state: any) => state?.get_notifications?.data?.[0]
 export const selectNotificationsStatus = (state: any) => state?.get_notifications?.status
 export default get_notifications;
