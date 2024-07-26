@@ -1,8 +1,9 @@
-import instance, { chatApi } from "./axios"
+import instance, { chatApi, setChatToken } from "./axios"
 
 export const tokenFactory = async (): Promise<string> => {
   try {
     const response = await instance.get('/chat/token')
+    setChatToken(response?.data?.access_token)
     return response?.data?.access_token
   } catch (error) {
     console.error(error)
