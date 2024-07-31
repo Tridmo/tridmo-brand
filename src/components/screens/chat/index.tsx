@@ -3,7 +3,7 @@
 import { Box, Grid } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSelectedConversation, setSelectedConversation } from '../../../data/chat';
+import { getChatUnread, selectSelectedConversation, setSelectedConversation } from '../../../data/chat';
 import { selectMyProfile } from '../../../data/me';
 import { tokenFactory } from '../../../utils/chat';
 import { CHAT_SERVER_URL } from '../../../utils/env_vars';
@@ -33,6 +33,14 @@ export default function Chat() {
     ]))
   }, [])
 
+  function handleChatUnread(e) {
+    const x = setTimeout(() => {
+      console.log('working');
+      dispatch(getChatUnread());
+      clearTimeout(x)
+    }, 500)
+  }
+
 
   return (
     <Box sx={{ background: "#fafafa" }} className="products" >
@@ -46,7 +54,9 @@ export default function Chat() {
             justifyContent: 'center'
           }}
         >
-          <Grid item xs={12}>
+          <Grid item xs={12} id='wy-messenger-container'
+            onClick={handleChatUnread}
+          >
             <WyMessenger
               uid={`${profile?.username}-messenger`}
               notifications='button-list'

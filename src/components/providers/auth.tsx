@@ -13,13 +13,15 @@ import useHash from "../hooks/use_hash";
 import { resetMyProfile } from '../../data/get_profile'
 import { toast } from 'react-toastify'
 import { setVerifyState } from '../../data/modal_checker'
-import { getChatToken } from "../../data/get_chat_token";
+import { getChatToken, selectChatToken } from "../../data/get_chat_token";
+import { tokenFactory } from "../../utils/chat";
 
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch<any>();
   const update_cookie_status = useSelector((state: any) => state?.update_access_token?.status);
   const myProfile = useSelector(selectMyProfile)
+  const chatToken = useSelector(selectChatToken)
   const myProfileStatus = useSelector((state: any) => state?.profile_me?.status)
 
   const pathname = usePathname()
@@ -81,11 +83,14 @@ export const AuthProvider = ({ children }) => {
         if (myProfileStatus === 'idle') {
           await dispatch(getMyProfile())
         }
+        if (myProfile && (!Cookies.get('chatToken') || !chatToken)) {
+          dispatch(getChatToken())
+          await tokenFactory()
+        }
         if (myProfileStatus === 'rejected') {
           dispatch(setAuthState(false));
         }
 
-        dispatch(getChatToken())
         dispatch(setAuthState(true));
       }
 

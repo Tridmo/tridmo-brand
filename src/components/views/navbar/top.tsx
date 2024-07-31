@@ -7,24 +7,19 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Image from 'next/image';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Buttons from '../../buttons';
 import { selectMyProfile } from '@/data/me'
 import SimpleTypography from '../../typography';
 import { ThemeProps } from '@/types/theme';
 import Link from 'next/link';
-import BasicModal from '@/components/modals/modal';
 import { selectToggleCardActionStatus, switch_on } from '../../../data/toggle_cart';
 import { setAuthState } from '../../../data/login';
 import Cookies from 'js-cookie'
-import { CHAT_SERVER_URL, IMAGES_BASE_URL } from '../../../utils/env_vars';
 import RouteCrumbs from './route_crumbs';
-import { WyNotificationButtonList, WyNotifications, useWeavy } from '@weavy/uikit-react';
-import { tokenFactory } from '../../../utils/chat';
 import { ChatOutlined } from '@mui/icons-material';
 import { selectNotifications } from '../../../data/get_notifications';
+import { selectChatUnread } from '../../../data/chat';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -64,6 +59,7 @@ export default function NavbarTop() {
   const dispatch = useDispatch<any>();
   const x = useSelector(selectToggleCardActionStatus)
 
+  const chatUnread = useSelector(selectChatUnread)
   const notifications = useSelector(selectNotifications)
 
   const handleClick = (event: any) => {
@@ -184,8 +180,28 @@ export default function NavbarTop() {
               </IconButton>
               <Link href={'/chat'}>
                 <IconButton
-                  sx={{ marginRight: "16px", }}
+                  sx={{ position: 'relative', marginRight: "16px", }}
                 >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      padding: '4px 6px',
+                      borderRadius: '12px',
+                      bgcolor: '#7210BE',
+                      top: 0,
+                      right: 0,
+                    }}
+                  >
+                    <SimpleTypography
+                      text={String(Number(chatUnread?.private || 0) + Number(chatUnread?.rooms || 0)) || '0'}
+                      sx={{
+                        color: '#fff',
+                        lineHeight: '11px',
+                        fontWeight: 400,
+                        fontSize: '12px',
+                      }}
+                    />
+                  </Box>
                   <ChatOutlined htmlColor='#424242' />
                 </IconButton>
               </Link>
