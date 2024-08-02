@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Box, SxProps } from '@mui/system'
 import { useSelector, useDispatch } from 'react-redux'
 import Buttons from '@/components/buttons'
@@ -41,6 +41,7 @@ interface InputProps {
   children?: React.ReactNode;
   className?: string;
   initialSelected?: any[];
+  clear?: boolean;
 }
 
 export default function ColorsSelect(props: InputProps) {
@@ -55,7 +56,7 @@ export default function ColorsSelect(props: InputProps) {
   React.useEffect(() => {
     if (ColorsStatus === "succeeded") {
       let arr = new Array();
-      AllColors?.[0]?.data?.forEach((color: colorProps) => {
+      AllColors[0]?.data?.forEach((color: colorProps) => {
         arr.push({
           id: color?.id,
           created_at: color?.created_at,
@@ -125,6 +126,18 @@ export default function ColorsSelect(props: InputProps) {
   useEffect(() => {
     props?.onChange(selectedColors)
   }, [selectedColors])
+
+  useMemo(() => {
+    if (!!props?.clear) {
+      const arr = [...custom__colors]
+      arr.forEach(c => {
+        c.is__Selected = false
+        c.is__Disabled = false
+      })
+      setCustom__colors(arr)
+      setSelectedColors([])
+    }
+  }, [props?.clear])
 
   if (ColorsStatus === "succeeded") {
     return (

@@ -28,6 +28,7 @@ import { selectOneModel } from "../../../../data/model_slider";
 import { IMAGES_BASE_URL } from "../../../../utils/env_vars";
 import { selectOneBrand } from "../../../../data/get_one_brand";
 import { setRouteCrumbs } from "../../../../data/route_crumbs";
+import { CleaningServices } from "@mui/icons-material";
 
 const availabilityData = [
   {
@@ -44,7 +45,7 @@ const availabilityData = [
   },
 ]
 
-const supportedFileTypes = 'application/x-compressed, application/x-zip-compressed, application/x-rar-compressed, application/x-7z-compressed,, .zip, .rar, .7z'
+const supportedFileTypes = 'application/x-compressed, application/x-zip-compressed, application/x-rar-compressed, application/x-7z-compressed, .zip, .rar, .7z'
 const supportedImageTypes = 'image/png, image/jpg, image/jpeg, image/webp'
 const imagesCountLimit = 9;
 const maxFileSize = 100;
@@ -101,7 +102,7 @@ const labelStyle: CSSProperties = {
   margin: '0 0 6px 0',
 }
 
-export function AddModelForm({ editing = false, selectedBrand }: { editing?: boolean, selectedBrand?: any }) {
+export function AddModelForm({ editing = false, model, selectedBrand }: { editing?: boolean, model?: any, selectedBrand?: any }) {
   const stylesData = useSelector(selectAllStyles)
   const categoriesData = useSelector(selectModelCategories);
   const colorsData = useSelector(selectAllColors);
@@ -109,7 +110,6 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
   const brandsData = useSelector(selectAllBrands);
   const modelPlatformsData = useSelector(selectModelPlatforms);
   const renderPlatformsData = useSelector(selectRenderPlatforms);
-  const model = (useSelector(selectOneModel))?.data?.model;
 
   const dispatch = useDispatch<any>()
   const router = useRouter()
@@ -117,25 +117,24 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
 
   const [categoryChildren, setCategoryChildren] = useState<any[]>([])
   const [brand, setBrand] = useState<any>(null)
+  const [clearInputs, setClearInputs] = useState<boolean>(false)
 
-  if (editing) {
-    useEffect(() => {
-      if (model) {
-        dispatch(setRouteCrumbs(
-          [{
-            title: 'Модели',
-            route: '/models'
-          }, {
-            title: model?.name,
-            route: `/models/${model?.slug}`
-          }, {
-            title: 'Редактировать',
-            route: `/models/edit/${model?.slug}`
-          }]
-        ))
-      }
-    }, [model])
-  }
+  useEffect(() => {
+    if (model && editing) {
+      dispatch(setRouteCrumbs(
+        [{
+          title: 'Модели',
+          route: '/models'
+        }, {
+          title: model?.name,
+          route: `/models/${model?.slug}`
+        }, {
+          title: 'Редактировать',
+          route: `/models/edit/${model?.slug}`
+        }]
+      ))
+    }
+  }, [model, editing])
 
   function selectParentCategory(id) {
     const data: any[] = [...categoriesData]
@@ -155,6 +154,13 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
       setBrand(brandsData?.data?.brands?.find(x => x?.slug == selectedBrand))
     }
   }, [selectedBrand, brandsData])
+
+  useMemo(() => {
+    const x = setTimeout(() => {
+      setClearInputs(false)
+      clearTimeout(x)
+    }, 500)
+  }, [clearInputs])
 
   const initials = {
     name: editing && model?.name ? model?.name : '',
@@ -193,52 +199,52 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
 
           initialValues={initials}
 
-          // validationSchema={
-          //   Yup.object().shape(
-          //     editing ?
-          //       {
-          //         name: Yup.string().max(255).optional(),
-          //         width: Yup.number().optional(),
-          //         height: Yup.number().optional(),
-          //         length: Yup.number().optional(),
-          //         furniture_cost: Yup.number().optional(),
-          //         availability: Yup.string().max(255).optional(),
-          //         description: Yup.string().max(255).optional(),
-          //         style_id: Yup.number().optional(),
-          //         parent_category_id: Yup.number().optional(),
-          //         category_id: Yup.number().optional(),
-          //         brand_id: Yup.string().optional(),
-          //         model_platform_id: Yup.string().optional(),
-          //         render_platform_id: Yup.string().optional(),
-          //         colors: Yup.array().of(Yup.number()).min(1).optional(),
-          //         materials: Yup.array().of(Yup.number()).min(1).optional(),
+          validationSchema={
+            Yup.object().shape(
+              editing && model ?
+                {
+                  name: Yup.string().max(255).optional(),
+                  width: Yup.number().optional(),
+                  height: Yup.number().optional(),
+                  length: Yup.number().optional(),
+                  furniture_cost: Yup.number().optional(),
+                  availability: Yup.string().max(255).optional(),
+                  description: Yup.string().max(255).optional(),
+                  style_id: Yup.number().optional(),
+                  parent_category_id: Yup.number().optional(),
+                  category_id: Yup.number().optional(),
+                  brand_id: Yup.string().optional(),
+                  model_platform_id: Yup.string().optional(),
+                  render_platform_id: Yup.string().optional(),
+                  colors: Yup.array().of(Yup.number()).min(1).optional(),
+                  materials: Yup.array().of(Yup.number()).min(1).optional(),
 
-          //         file: Yup.mixed().optional(),
-          //         cover: Yup.mixed().optional(),
-          //         images: Yup.array().of(Yup.mixed()).optional()
-          //       } : {
-          //         name: Yup.string().max(255).required('Название не указано'),
-          //         width: Yup.number().required('Ширина не указано'),
-          //         height: Yup.number().required('Высота не указано'),
-          //         length: Yup.number().required('Длина не указано'),
-          //         furniture_cost: Yup.number().required('Цена не указано'),
-          //         availability: Yup.string().max(255).required('Доступность не указано'),
-          //         description: Yup.string().max(255).required('Описание не указано'),
-          //         style_id: Yup.number().required('Cтиль не указано'),
-          //         parent_category_id: Yup.number().required('Основная категория не указана'),
-          //         category_id: Yup.number().required('Категория не указано'),
-          //         brand_id: Yup.string().required('Категория не указано'),
-          //         model_platform_id: Yup.string().required('Платформа не указано'),
-          //         render_platform_id: Yup.string().required('Платформа не указано'),
-          //         colors: Yup.array().of(Yup.number()).min(1).required('Загрузите хотя бы один цвет'),
-          //         materials: Yup.array().of(Yup.number()).min(1).required('Загрузите хотя бы один материал'),
+                  file: Yup.mixed().optional(),
+                  cover: Yup.mixed().optional(),
+                  images: Yup.array().of(Yup.mixed()).optional()
+                } : {
+                  name: Yup.string().max(255).required('Название не указано'),
+                  width: Yup.number().required('Ширина не указано'),
+                  height: Yup.number().required('Высота не указано'),
+                  length: Yup.number().required('Длина не указано'),
+                  furniture_cost: Yup.number().optional(),
+                  availability: Yup.string().max(255).required('Доступность не указано'),
+                  description: Yup.string().max(255).required('Описание не указано'),
+                  style_id: Yup.number().required('Cтиль не указано'),
+                  parent_category_id: Yup.number().required('Основная категория не указана'),
+                  category_id: Yup.number().required('Категория не указано'),
+                  brand_id: Yup.string().required('Категория не указано'),
+                  model_platform_id: Yup.string().required('Платформа не указано'),
+                  render_platform_id: Yup.string().required('Платформа не указано'),
+                  colors: Yup.array().of(Yup.number()).min(1).required('Загрузите хотя бы один цвет'),
+                  materials: Yup.array().of(Yup.number()).min(1).required('Загрузите хотя бы один материал'),
 
-          //         file: Yup.mixed().required('Загрузите файл'),
-          //         cover: Yup.mixed().required('Загрузите изображение обложки'),
-          //         images: Yup.array().of(Yup.mixed()).required('Загрузите хотя бы одно изображение')
-          //       }
-          //   )
-          // }
+                  file: Yup.mixed().required('Загрузите файл'),
+                  cover: Yup.mixed().required('Загрузите изображение обложки'),
+                  images: Yup.array().of(Yup.mixed()).required('Загрузите хотя бы одно изображение')
+                }
+            )
+          }
           onSubmit={async (
             _values, { resetForm, setErrors, setStatus, setSubmitting }
           ) => {
@@ -246,19 +252,19 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
             try {
               const formData = new FormData()
 
-              if (editing) {
-                if (_values.name) formData.append('name', _values.name)
-                if (_values.width) formData.append('width', _values.width)
-                if (_values.height) formData.append('height', _values.height)
-                if (_values.length) formData.append('length', _values.length)
-                if (_values.furniture_cost) formData.append('furniture_cost', _values.furniture_cost)
-                if (_values.availability) formData.append('availability', _values.availability)
-                if (_values.description) formData.append('description', _values.description)
-                if (_values.style_id) formData.append('style_id', _values.style_id)
-                if (_values.category_id) formData.append('category_id', _values.category_id)
-                if (_values.brand_id) formData.append('brand_id', _values.brand_id)
-                if (_values.model_platform_id) formData.append('model_platform_id', _values.model_platform_id)
-                if (_values.render_platform_id) formData.append('render_platform_id', _values.render_platform_id)
+              if (editing && model) {
+                if (_values.name != model?.name) formData.append('name', _values.name)
+                if (_values.width != model?.width) formData.append('width', _values.width)
+                if (_values.height != model?.height) formData.append('height', _values.height)
+                if (_values.length != model?.length) formData.append('length', _values.length)
+                if (_values.furniture_cost != model?.furniture_cost) formData.append('furniture_cost', _values.furniture_cost)
+                if (_values.availability != model?.availability) formData.append('availability', _values.availability)
+                if (_values.description != model?.description) formData.append('description', _values.description)
+                if (_values.style_id != model?.style_id) formData.append('style_id', _values.style_id)
+                if (_values.category_id != model?.category_id) formData.append('category_id', _values.category_id)
+                if (_values.brand_id != model?.brand_id) formData.append('brand_id', _values.brand_id)
+                if (_values.model_platform_id != model?.model_platform_id) formData.append('model_platform_id', _values.model_platform_id)
+                if (_values.render_platform_id != model?.render_platform_id) formData.append('render_platform_id', _values.render_platform_id)
                 if (_values.file) formData.append('file', _values.file)
                 if (_values.cover) formData.append('cover', _values.cover)
 
@@ -290,7 +296,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                 formData.append('width', _values.width)
                 formData.append('height', _values.height)
                 formData.append('length', _values.length)
-                formData.append('furniture_cost', _values.furniture_cost)
+                if (_values.furniture_cost) formData.append('furniture_cost', _values.furniture_cost)
                 formData.append('availability', _values.availability)
                 formData.append('description', _values.description)
                 formData.append('style_id', _values.style_id)
@@ -329,8 +335,11 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
               setStatus({ success: true });
               setSubmitting(false);
               resetForm()
+              setClearInputs(true)
 
-              // router.push(`/models/${res?.data?.data?.model?.slug}`)
+              if (editing && model) {
+                router.push(`/models/${model?.slug}`)
+              }
 
             } catch (err: any) {
               setStatus({ success: false });
@@ -346,6 +355,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
               handleChange,
               handleSubmit,
               setFieldValue,
+              resetForm,
               errors,
               isSubmitting,
               touched,
@@ -498,7 +508,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                         {
                           modelPlatformsData?.platforms?.map(
                             (c, i) => (
-                              <MenuItem key={i} value={c.id}>{c.name}</MenuItem>
+                              <MenuItem key={i} value={c.id} selected={c.name == '3Ds max'}>{c.name}</MenuItem>
                             )
                           )
                         }
@@ -521,7 +531,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                         {
                           renderPlatformsData?.platforms?.map(
                             (c, i) => (
-                              <MenuItem key={i} value={c.id}>{c.name}</MenuItem>
+                              <MenuItem key={i} value={c.id} selected={c.name == '3Ds max'}>{c.name}</MenuItem>
                             )
                           )
                         }
@@ -556,6 +566,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                       </SimpleSelect>
 
                       <MultipleSelect
+                        clear={clearInputs}
                         className='input_width'
                         variant='outlined'
                         paddingX={12}
@@ -591,7 +602,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                       sx={{ ...formControlSx }}
                     >
                       <ColorsSelect
-                        // className='input_width'
+                        clear={clearInputs}
                         error={Boolean(touched.colors && errors.colors)}
                         helperText={touched.colors && errors.colors}
                         name="colors"
@@ -747,6 +758,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                   >
                     <Box sx={{ ...formControlSx }}>
                       <FileInput
+                        clear={clearInputs}
                         labelElement={<label data-shrink='true' style={labelStyle}> Файл </label>}
                         error={Boolean(touched.file && errors.file)}
                         helperText={touched.file && errors.file}
@@ -766,6 +778,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
 
                     <Box sx={{ ...formControlSx }}>
                       <FileInput
+                        clear={clearInputs}
                         labelElement={<label data-shrink='true' style={labelStyle}> Обложка </label>}
                         error={Boolean(touched.cover && errors.cover)}
                         helperText={touched.cover && errors.cover}
@@ -778,14 +791,14 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                           setFieldValue('cover', files[0])
                         }}
                         initialPreviews={
-                          editing && model?.images ?
-                            model?.images?.filter(i => i?.is_main == true).map(i => `${IMAGES_BASE_URL}/${i?.image_src}`) : []
+                          editing && model?.cover ? [`${IMAGES_BASE_URL}/${model?.cover?.image_src}`] : []
                         }
                       />
                     </Box>
 
                     <Box sx={{ ...formControlSx }}>
                       <FileInput
+                        clear={clearInputs}
                         labelElement={<label data-shrink='true' style={labelStyle}> Изображений </label>}
                         error={Boolean(touched.images && errors.images)}
                         helperText={touched.images && errors.images}
@@ -809,7 +822,7 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
                         }}
                         initialPreviews={
                           editing && model?.images ?
-                            model?.images?.filter(i => i?.is_main == false).map(i => `${IMAGES_BASE_URL}/${i?.image_src}`) : []
+                            model?.images?.map(i => `${IMAGES_BASE_URL}/${i?.image_src}`) : []
                         }
                       />
                     </Box>
@@ -818,6 +831,21 @@ export function AddModelForm({ editing = false, selectedBrand }: { editing?: boo
 
                 </Grid>
                 <Box sx={{ marginTop: '40px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                  <Buttons
+                    name={'Очистить все'}
+                    childrenFirst={true}
+                    onClick={() => {
+                      setClearInputs(true)
+                      resetForm()
+                    }}
+                    disabled={isSubmitting}
+                    className="bookmark__btn"
+                    sx={{
+                      mr: '24px'
+                    }}
+                  >
+                    <CleaningServices sx={{ width: '20px', height: '20px', mr: '8px' }} />
+                  </Buttons>
                   <Buttons
                     name={editing ? "Сохранить" : "Загрузить"}
                     childrenFirst={true}
