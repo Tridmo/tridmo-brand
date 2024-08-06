@@ -821,7 +821,7 @@ export const EditProfileContext = (props: LoginContextProps) => {
             setStatus({ success: true });
             dispatch(setProfileEditState(false));
             dispatch(setOpenModal(false));
-            dispatch(getMyProfile());
+            dispatch(getMyProfile({}));
             toast.success(res?.data?.message || 'Успешно сохранено');
           } catch (err: any) {
             setStatus({ success: false });

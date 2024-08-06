@@ -9,19 +9,19 @@ const initialState = {
   progress: 0,
 };
 export const getMyProfile = createAsyncThunk('/users/profile',
-  async (headers?: { Authorization: string }) => {
-    const response = await api.get(`users/profile`, {
-      headers: headers ? {
-        ...headers,
-        'Accept-Language': 'ru'
-      } : {
-        'Accept-Language': 'ru'
-      },
-      onDownloadProgress: (progressEvent) => {
-        // initialState.progress = 70
-      }
-    })
-    return response.data
+  async (headers: { Authorization?: string }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`users/profile`, {
+        headers: {
+          ...headers,
+          'Accept-Language': 'ru'
+        }
+      })
+      return response.data
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+
   })
 export const deleteCustomer = createAsyncThunk('/reservations/customer/delete', async (id?: any) => {
 

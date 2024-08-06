@@ -12,3 +12,14 @@ export const months = [
   { number: 11, name: 'Ноябрь' },
   { number: 12, name: 'Декабрь' }
 ];
+
+export const modelStatuses = {
+  1: 'Доступно',
+  2: 'Не доступно',
+  3: 'Под заказ',
+}
+
+export const notificationActionMessages = {
+  new_model_download: ` скачал(a) модель `,
+  new__tag: ` создал(a) бирку для модель `,
+}

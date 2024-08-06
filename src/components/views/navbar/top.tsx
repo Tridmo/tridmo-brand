@@ -18,8 +18,9 @@ import { setAuthState } from '../../../data/login';
 import Cookies from 'js-cookie'
 import RouteCrumbs from './route_crumbs';
 import { ChatOutlined } from '@mui/icons-material';
-import { selectNotifications } from '../../../data/get_notifications';
+import { selectNotificationCounts, selectNotificationCountsStatus, selectNotifications } from '../../../data/get_notifications';
 import { selectChatUnread } from '../../../data/chat';
+import { IMAGES_BASE_URL } from '../../../utils/env_vars';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -57,10 +58,11 @@ export default function NavbarTop() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch<any>();
-  const x = useSelector(selectToggleCardActionStatus)
 
   const chatUnread = useSelector(selectChatUnread)
-  const notifications = useSelector(selectNotifications)
+  const profile = useSelector(selectMyProfile)
+  const notificationCountsStatus = useSelector(selectNotificationCountsStatus);
+  const notificationCounts = useSelector(selectNotificationCounts);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -171,6 +173,30 @@ export default function NavbarTop() {
                 aria-label="menu"
                 sx={{ marginRight: "16px", backgroundColor: false ? 'rgba(0, 0, 0, 0.04)' : 'transparent' }}
               >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    padding: '4px 6px',
+                    borderRadius: '12px',
+                    bgcolor: '#7210BE',
+                    top: 0,
+                    right: 0,
+                  }}
+                >
+                  <SimpleTypography
+                    text={
+                      notificationCountsStatus === 'succeeded' ?
+                        notificationCounts?.data?.unread_count || '0'
+                        : '0'
+                    }
+                    sx={{
+                      color: '#fff',
+                      lineHeight: '11px',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                    }}
+                  />
+                </Box>
                 <Image
                   src="/icons/bell-icon.svg"
                   alt='Bell'
@@ -219,7 +245,7 @@ export default function NavbarTop() {
 
                 <Image
                   alt='image'
-                  src={`/img/avatar.png`}
+                  src={profile?.image_src ? `${IMAGES_BASE_URL}/${profile?.image_src}` : `/img/avatar.png`}
                   width={40}
                   height={40}
                   style={{

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { sampleBrand } from '@/data/samples';
 import { selectOneBrand } from '../../../../data/get_one_brand';
 import { IMAGES_BASE_URL } from '../../../../utils/env_vars';
+import { Instagram } from '@mui/icons-material';
 
 
 export default function BrandInfo() {
@@ -145,17 +146,15 @@ export default function BrandInfo() {
             </Link>
           </Grid>
           <Grid item>
-            <Link href={`mailto:${brand?.email}`}>
+            <Link style={{ width: '100%' }} href={brand?.instagram?.startsWith('https://instagram.com/') ? brand?.instagram : `https://instagram.com/${brand?.instagram}`}>
               <Buttons className='brand__box' name="">
-                <Image
-                  width={19}
-                  height={23}
-                  alt="Email"
-                  src={"/icons/mail.svg"}
-                />
+                <Instagram sx={{
+                  width: '19px',
+                  height: '23px'
+                }} />
                 <Box sx={{ marginLeft: "11px" }}>
-                  <SimpleTypography className='brand__name' text="Электрон Почта" />
-                  <SimpleTypography className='brand__box--text' text={`${brand?.email}`} />
+                  <SimpleTypography className='brand__name' text="Инстаграм" />
+                  <SimpleTypography className='brand__box--text' text={`${brand?.instagram}`} />
                 </Box>
               </Buttons>
             </Link>

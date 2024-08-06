@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface ConfirmContextProps {
   message?: string;
   info?: string;
-  is_loading?: boolean; 
+  is_loading?: boolean;
   actions?: {
     on_click: {
       args: any[];
@@ -21,12 +21,21 @@ export interface ConfirmData {
 }
 
 export interface ContextState {
+  isProfileImage: boolean;
+  profileImagePreview: File | null;
   isConfirm: boolean;
   isLogin: boolean;
+  isWarning: boolean;
+  warningMessage: string;
+  isInfo: boolean;
   isSignup: boolean;
   isVerify: boolean;
   isModalOpen: boolean;
   isProfileEdit: boolean;
+  isProjectsList: boolean;
+  isAddingProject: boolean;
+  isEditingProject: boolean;
+  editingProject: any;
   order_id: string | null,
   isOrderModal: boolean;
   isFilterModal: boolean;
@@ -36,11 +45,20 @@ export interface ContextState {
 
 // Initial state
 const initialState: ContextState = {
+  isProfileImage: false,
+  profileImagePreview: null,
   isConfirm: false,
+  isWarning: false,
+  warningMessage: '',
+  isInfo: false,
   isLogin: false,
   isSignup: false,
   isVerify: false,
   isProfileEdit: false,
+  isAddingProject: false,
+  isProjectsList: false,
+  isEditingProject: false,
+  editingProject: null,
   isModalOpen: false,
   order_id: null,
   isOrderModal: false,
@@ -85,6 +103,27 @@ const modalChecker = createSlice({
     setSignupState(state, action) {
       state.isSignup = action.payload;
     },
+    setWarningState(state, action) {
+      state.isWarning = action.payload;
+    },
+    setWarningMessage(state, action) {
+      state.warningMessage = action.payload;
+    },
+    setInfoState(state, action) {
+      state.isInfo = action.payload;
+    },
+    setAddingProjectState(state, action) {
+      state.isAddingProject = action.payload;
+    },
+    setEditingProjectState(state, action) {
+      state.isEditingProject = action.payload;
+    },
+    setEditingProject(state, action) {
+      state.editingProject = action.payload;
+    },
+    setProjectsListState(state, action) {
+      state.isProjectsList = action.payload;
+    },
     setVerifyState(state, action) {
       state.isVerify = action.payload;
     },
@@ -97,6 +136,12 @@ const modalChecker = createSlice({
 
     setProfileEditState(state, action) {
       state.isProfileEdit = action.payload;
+    },
+    setProfileImageState(state, action) {
+      state.isProfileImage = action.payload;
+    },
+    setProfileImagePreview(state, action: PayloadAction<File | null>) {
+      state.profileImagePreview = action.payload;
     },
     setOpenOrderModal(state, action) {
       const { isOpen, order_id } = action.payload
@@ -127,6 +172,15 @@ const modalChecker = createSlice({
 });
 
 export const {
+  setProjectsListState,
+  setEditingProject,
+  setEditingProjectState,
+  setAddingProjectState,
+  setProfileImagePreview,
+  setWarningState,
+  setWarningMessage,
+  setInfoState,
+  setProfileImageState,
   setConfirmState,
   setLoginState,
   setSignupState,
@@ -141,4 +195,5 @@ export const {
   resetConfirmData
 } = modalChecker.actions;
 
+export const selectEditingProject = (state: any) => state?.modal_checker?.editingProject
 export const reducer = modalChecker.reducer;
