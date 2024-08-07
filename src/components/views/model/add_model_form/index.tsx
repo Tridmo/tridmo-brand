@@ -688,22 +688,6 @@ export function AddModelForm({ editing = false, model, selectedBrand }: { editin
                         variant='outlined'
                         paddingX={12}
                         paddingY={12}
-                        error={Boolean(touched.height && errors.height)}
-                        helperText={touched.height && errors.height}
-                        name="height"
-                        type="number"
-                        autoComplete="off"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.height}
-                        placeholderText="Высота"
-                        endIconWithBg={'см'}
-                      />
-                      <SimpleInp
-                        className='dimensions_input_width'
-                        variant='outlined'
-                        paddingX={12}
-                        paddingY={12}
                         error={Boolean(touched.length && errors.length)}
                         helperText={touched.length && errors.length}
                         name="length"
@@ -713,6 +697,22 @@ export function AddModelForm({ editing = false, model, selectedBrand }: { editin
                         onChange={handleChange}
                         value={values.length}
                         placeholderText="Длина"
+                        endIconWithBg={'см'}
+                      />
+                      <SimpleInp
+                        className='dimensions_input_width'
+                        variant='outlined'
+                        paddingX={12}
+                        paddingY={12}
+                        error={Boolean(touched.height && errors.height)}
+                        helperText={touched.height && errors.height}
+                        name="height"
+                        type="number"
+                        autoComplete="off"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.height}
+                        placeholderText="Высота"
                         endIconWithBg={'см'}
                       />
 

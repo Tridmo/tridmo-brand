@@ -104,29 +104,29 @@ const listSx: SxProps = {
 const widthControl = {
 
   '&:nth-of-type(1)': {
-    minWidth: '360px',
-    maxWidth: '360px',
+    minWidth: '45%',
+    maxWidth: '45%',
   },
   '&:nth-of-type(2)': {
-    minWidth: '320px',
-    maxWidth: '320px',
+    minWidth: '45%',
+    maxWidth: '45%',
   },
   '&:nth-of-type(3)': {
-    minWidth: '200px',
-    maxWidth: '200px',
+    minWidth: '10%',
+    maxWidth: '10%',
   },
-  '&:nth-of-type(4)': {
-    minWidth: '100px',
-    maxWidth: '100px',
-  },
-  '&:nth-of-type(5)': {
-    minWidth: '100px',
-    maxWidth: '100px',
-  },
-  '&:nth-of-type(6)': {
-    minWidth: '100px',
-    maxWidth: '100px',
-  },
+  // '&:nth-of-type(4)': {
+  //   minWidth: '100px',
+  //   maxWidth: '100px',
+  // },
+  // '&:nth-of-type(5)': {
+  //   minWidth: '100px',
+  //   maxWidth: '100px',
+  // },
+  // '&:nth-of-type(6)': {
+  //   minWidth: '100px',
+  //   maxWidth: '100px',
+  // },
 }
 
 const itemAsLink = {
@@ -337,18 +337,18 @@ export default function UsersPage() {
                 sx={liHeaderSx}
               >
                 <SimpleTypography
-                  text='Ф.И.О'
+                  text='Пользователь'
                   sx={{ ...liHeaderTextSx, ...widthControl }}
                 />
                 <SimpleTypography
-                  text='E-mail'
+                  text='Скачанная модель'
                   sx={{ ...liHeaderTextSx, ...widthControl }}
                 />
                 <SimpleTypography
                   text='Дата'
                   sx={{ ...liHeaderTextSx, ...widthControl }}
                 />
-                <SimpleTypography
+                {/* <SimpleTypography
                   text='Интерьеры'
                   sx={{ ...liHeaderTextSx, ...widthControl, textAlign: 'center' }}
                 />
@@ -359,7 +359,7 @@ export default function UsersPage() {
                 <SimpleTypography
                   text='Загрузки'
                   sx={{ ...liHeaderTextSx, ...widthControl, textAlign: 'center' }}
-                />
+                /> */}
               </ListItem>
               {
                 users_status == 'succeeded' ?
@@ -388,7 +388,8 @@ export default function UsersPage() {
                                 opacity: '1'
                               },
                               '&::after': {
-                                backgroundImage: `url(${IMAGES_BASE_URL}/${user?.image_src})`,
+                                backgroundImage: user?.image_src ? `url(${IMAGES_BASE_URL}/${user?.image_src})` : `url('/img/avatar.png')`,
+                                bgcolor: '#fff',
                                 transition: 'opacity 0.3s ease',
                                 zIndex: 3000,
                                 backgroundRepeat: 'no-repeat',
@@ -408,7 +409,7 @@ export default function UsersPage() {
                             }}
                           >
                             <Image
-                              src={`${IMAGES_BASE_URL}/${user?.image_src}`}
+                              src={user?.image_src ? `${IMAGES_BASE_URL}/${user?.image_src}` : `/img/avatar.png`}
                               alt='image'
                               width={36}
                               height={36}
@@ -430,7 +431,80 @@ export default function UsersPage() {
                               }}
                             />
                             <SimpleTypography
-                              text={`#${user?.username}`}
+                              text={`@${user?.username}`}
+                              sx={{
+                                fontSize: '12px',
+                                fontWeight: 400,
+                                lineHeight: '24px',
+                                letterSpacing: '-0.01em',
+                                textAlign: 'start',
+                                color: '#848484'
+                              }}
+                            />
+                          </ListItemText>
+                        </ListItemText>
+
+                        <ListItemText onClick={() => navigateTo(`/models/${user?.model_slug}`)}
+                          sx={{
+                            ...widthControl, ...itemAsLink,
+                            '& > span:first-of-type': {
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-start'
+                            }
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              ...modelImageWrapperSx,
+                              '&:hover:after': {
+                                opacity: '1'
+                              },
+                              '&::after': {
+                                backgroundImage: user?.model_cover ? `url(${IMAGES_BASE_URL}/${user?.model_cover})` : `url(/img/cube.jpg)`,
+                                bgcolor: '#fff',
+                                transition: 'opacity 0.3s ease',
+                                zIndex: 3000,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundSize: 'cover',
+                                content: '""',
+                                display: 'flex',
+                                pointerEvents: 'none',
+                                opacity: '0',
+                                border: '1px solid #B8B8B8',
+                                borderRadius: '4px',
+                                width: '320px',
+                                height: '320px',
+                                position: 'absolute',
+                                top: '-160',
+                                left: '100%',
+                              }
+                            }}
+                          >
+                            <Image
+                              src={user?.model_cover ? `${IMAGES_BASE_URL}/${user?.model_cover}` : `/img/cube.jpg`}
+                              alt='image'
+                              width={36}
+                              height={36}
+                              style={modelImageSx}
+                            />
+                          </Box>
+
+
+                          <ListItemText onClick={() => navigateTo(`/models/${user?.model_slug}`)} className='brand_name' sx={{ marginLeft: '24px', }} >
+                            <SimpleTypography
+                              text={user.model_name}
+                              sx={{
+                                fontSize: '16px',
+                                fontWeight: 400,
+                                lineHeight: '26px',
+                                letterSpacing: '-0.02em',
+                                textAlign: 'start',
+                                color: '#141414'
+                              }}
+                            />
+                            <SimpleTypography
+                              text={`#${user?.model_id}`}
                               sx={{
                                 fontSize: '12px',
                                 fontWeight: 400,
@@ -444,27 +518,11 @@ export default function UsersPage() {
                         </ListItemText>
 
                         <ListItemText title='Нажмите, чтобы открыть'
-                          onClick={() => navigateTo(`/users/${user?.username}`)}
-                          sx={{ ...widthControl, ...itemAsLink }}
-                        >
-                          <SimpleTypography
-                            text={user?.email}
-                            sx={{
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '26px',
-                              letterSpacing: '-0.02em',
-                              textAlign: 'start',
-                            }}
-                          />
-                        </ListItemText>
-
-                        <ListItemText title='Нажмите, чтобы открыть'
                           onClick={() => navigateTo(`/models/${user?.username}`)}
                           sx={{ ...widthControl, ...itemAsLink }}
                         >
                           <SimpleTypography
-                            text={formatDate(user?.created_at, true)}
+                            text={formatDate(user?.downloaded_at, true)}
                             sx={{
                               fontSize: '14px',
                               fontWeight: 400,
@@ -475,7 +533,7 @@ export default function UsersPage() {
                           />
                         </ListItemText>
 
-                        <ListItemText
+                        {/* <ListItemText
                           sx={{ ...widthControl }}
                         >
                           <SimpleTypography
@@ -518,7 +576,7 @@ export default function UsersPage() {
                               textAlign: 'center',
                             }}
                           />
-                        </ListItemText>
+                        </ListItemText> */}
 
                       </ListItem>
 

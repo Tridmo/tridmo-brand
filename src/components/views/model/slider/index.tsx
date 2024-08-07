@@ -14,7 +14,6 @@ import instance from '../../../../utils/axios';
 import { setLoginState, setOpenModal } from '../../../../data/modal_checker';
 import { toast } from 'react-toastify';
 
-const mainWidth = 558;
 
 const SimpleListItem = styled(ListItem)(
   ({ theme }) => `
@@ -66,6 +65,8 @@ const myLoader = () => {
 
 const fakeModelImages = [1, 2, 3, 4, 5]
 
+const mainWidth = 558;
+
 const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
   const [sliderBtnHover, setSliderBtnHover] = useState(0)
   const dispatch = useDispatch<any>()
@@ -108,228 +109,96 @@ const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
 
   if ("succeeded") {
     return (
-      <Box
-        sx={sx}
+      <Grid
+        sx={
+          name === "slider" ? {
+            display: "flex",
+            flexDirection: "unset",
+            flexWrap: 'nowrap',
+            marginTop: "20px",
+            ...sx
+          } : {
+            display: "flex",
+            flexDirection: "column-reverse",
+            ...sx
+          }
+        }
+        container={name === "slider" ? true : false}
+        spacing={name === "slider" ? 2 : 1}
+        item
+        md={name === "slider" ? 10 : 2}
+        xs={name === "slider" ? 10 : 2}
+        className="products__slider"
       >
         <Grid
-          sx={
-            name === "slider" ? {
-              display: "flex",
-              flexDirection: "unset",
-              marginTop: "20px",
-              maxWidth: '55.5% !important',
-            } : {
-              display: "flex",
-              flexDirection: "column-reverse"
-            }
-          }
-          container={name === "slider" ? true : false}
-          spacing={name === "slider" ? 2 : 1}
-          item
-          md={name === "slider" ? 6 : 12}
-          xs={12}
-          className="products__slider"
-        >
-          <Grid
-            className='products__small--wrap'
-            sx={name === "slider" ?
-              {
-                padding: "0 !important",
-                margin: "0 16px 0 18px !important",
-                height: `${wdth}px !important`,
-                maxWidth: '56px !important'
-              }
-              : {
-                padding: "11px !important",
-                display: "flex",
-                justifyContent: "center"
-              }}
-            item
-            md={name === "slider" ? 2 : 12}
-            xs={12}
-          >
-            <List
-              className='products__small-items'
-              sx={{ display: `${name === "slider" ? "block" : "flex"}`, paddingTop: 0 }}
-            >
-              {
-                simpleModel?.images?.map((slide: any, index: number) => (
-                  <SimpleListItem
-                    sx={name === "slider" ? { margin: "0 0 8px 0" } : { margin: "0 8px 0 0" }}
-                    className={`${sliderCount == index ? "MuiListItem-slider__item--active products__small--item" : "products__small--item"}`}
-                    onClick={() => setSliderCount(index)}
-                    key={index}
-                  >
-                    <Image
-                      width={56}
-                      height={56}
-                      style={{
-                        width: '100%',
-                        height: '100%'
-                      }}
-                      priority={true}
-                      alt="slider"
-                      src={`${IMAGES_BASE_URL}/${slide?.image_src}`}
-                    />
-                  </SimpleListItem>
-                ))
-              }
-
-            </List>
-          </Grid>
-
-          <Grid
-            sx={name === "slider" ?
-              {
-                overflow: "hidden",
-                position: "relative",
-                padding: "0 !important",
-                minWidth: `${wdth}px !important`,
-                maxHeight: `${wdth}px !important`
-              }
-              : {
-                padding: "0 !important",
-                overflow: "hidden"
-              }
-            }
-            item
-            xs={12}
-            md={name === "slider" ? 10 : 12}
-            onMouseEnter={() => setSliderBtnHover(1)}
-            onMouseLeave={() => setSliderBtnHover(0)}
-          >
-            <Box sx={ButtonHover}>
-              <Buttons
-                onClick={SliderRightHandler}
-                type="button"
-                className="slider__right--arrow"
-                name=""
-              >
-                <Image
-                  alt="Icons"
-                  src="/icons/slider-arrow-right.svg"
-                  width={9}
-                  height={14}
-                />
-              </Buttons>
-            </Box>
-            <Box sx={ButtonHover}>
-              <Buttons
-                onClick={SliderLeftHandler}
-                type="button"
-                className="slider__left--arrow"
-                name=""
-              >
-                <Image
-                  alt="Icons"
-                  src="/icons/slider-arrow-left.svg"
-                  width={9}
-                  height={14}
-                />
-              </Buttons>
-            </Box>
-
-            <List sx={{
-              transform: `translateX(-${sliderCount * wdth}px)`,
+          className='products__small--wrap'
+          sx={name === "slider" ?
+            {
               padding: "0 !important",
+              margin: "0 16px 0 18px !important",
+              height: `${wdth}px !important`,
+              maxWidth: '56px !important'
+            }
+            : {
+              padding: "11px !important",
               display: "flex",
-              position: 'relative',
-              width: `${simpleModel?.images?.length * wdth}px`,
-              transition: `all ${sliderTransition}s ease`
-            }}>
-              {
-                simpleModel?.images?.map((slide: any, index: number) => (
-                  <SimpleListItem
-                    className="MuiListItem-slider__big--item"
-                    onClick={(e) => { dispatch(setShowModelsModal(true)) }}
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
+              justifyContent: "center"
+            }}
+          item
+          md={name === "slider" ? 2 : 12}
+          xs={12}
+        >
+          <List
+            className='products__small-items'
+            sx={{ display: `${name === "slider" ? "block" : "flex"}`, paddingTop: 0 }}
+          >
+            {
+              simpleModel?.images?.map((slide: any, index: number) => (
+                <SimpleListItem
+                  sx={name === "slider" ? { margin: "0 0 8px 0" } : { margin: "0 8px 0 0" }}
+                  className={`${sliderCount == index ? "MuiListItem-slider__item--active products__small--item" : "products__small--item"}`}
+                  onClick={() => setSliderCount(index)}
+                  key={index}
+                >
+                  <Image
+                    width={56}
+                    height={56}
+                    style={{
+                      width: '100%',
+                      height: '100%'
                     }}
-                  >
-                    <SimpleImage
-                      alt=''
-                      layout='fill'
-                      sx={{ objectFit: name == 'slider' ? 'cover' : 'contain' }}
-                      src={`${IMAGES_BASE_URL}/${slide?.image_src}`}
-                      priority={true}
-                    />
-                  </SimpleListItem>
-                ))
-              }
+                    priority={true}
+                    alt="slider"
+                    src={`${IMAGES_BASE_URL}/${slide?.image_src}`}
+                  />
+                </SimpleListItem>
+              ))
+            }
 
-            </List>
-          </Grid>
+          </List>
         </Grid>
-      </Box>
-    )
-  } else {
-    return (
-      <Box
-        sx={sx}
-      >
+
         <Grid
-          sx={
-            name === "slider" ? {
-              display: "flex",
-              flexDirection: "unset",
-              marginTop: "20px"
-            } : {
-              display: "flex",
-              flexDirection: "column-reverse"
+          sx={name === "slider" ?
+            {
+              overflow: "hidden",
+              position: "relative",
+              padding: "0 !important",
+              minWidth: `${wdth}px !important`,
+              maxHeight: `${wdth}px !important`
+            }
+            : {
+              padding: "0 !important",
+              overflow: "hidden"
             }
           }
-          container={name === "slider" ? true : false}
-          spacing={name === "slider" ? 2 : 1}
           item
-          xs={name === "slider" ? 6 : 12}
+          xs={12}
+          md={name === "slider" ? 10 : 12}
+          onMouseEnter={() => setSliderBtnHover(1)}
+          onMouseLeave={() => setSliderBtnHover(0)}
         >
-          <Grid
-            sx={name === "slider" ? { padding: "0 0 0 18px !important" } :
-              {
-                padding: "11px !important",
-                display: "flex",
-                justifyContent: "center"
-              }
-            }
-            xs={name === "slider" ? 2 : 12}
-            item
-          >
-            <List
-              sx={{
-                padding: "0 !important",
-                display: `${name === "slider" ? "block" : "flex"}`
-              }}
-            >
-              {
-                fakeModelImages.map((slide: any, index: number) => (
-                  <SimpleListItem
-                    sx={name === "slider" ? { margin: "0 0 8px 0" } : { margin: "0 8px 0 0" }}
-                    className={`${sliderCount == index ? "MuiListItem-slider__item--active" : ""}`}
-                    onClick={() => setSliderCount(index)}
-                    key={index}
-                  >
-                    <Image
-                      loader={myLoader}
-                      width={56}
-                      height={56}
-                      alt="slider"
-                      src={`/img/card-loader.jpg`}
-                    />
-                  </SimpleListItem>
-                ))
-              }
-
-            </List>
-          </Grid>
-          <Grid
-            sx={name === "slider" ?
-              { overflow: "hidden", position: "relative", padding: "0 0 18px 0 !important" } : { padding: "0 !important", overflow: "hidden" }}
-            item
-            xs={name === "slider" ? 10 : 12}
-          >
+          <Box sx={ButtonHover}>
             <Buttons
               onClick={SliderRightHandler}
               type="button"
@@ -343,6 +212,8 @@ const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
                 height={14}
               />
             </Buttons>
+          </Box>
+          <Box sx={ButtonHover}>
             <Buttons
               onClick={SliderLeftHandler}
               type="button"
@@ -356,39 +227,165 @@ const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
                 height={14}
               />
             </Buttons>
-            <List sx={{
-              transform: `translateX(-${sliderCount * wdth}px)`,
-              padding: "0 !important",
-              display: "flex",
-              position: 'relative',
-              width: `${simpleModel?.images?.length * wdth}px`,
-              transition: `all ${sliderTransition}s ease`
-            }}>
-              {
-                fakeModelImages.map((slide: any, index: number) => (
-                  <SimpleListItem
-                    className="MuiListItem-slider__big--item"
-                    onClick={(e) => { dispatch(setShowModelsModal(true)) }}
-                    key={index}
-                  >
-                    <SimpleImage
-                      loader={myLoader}
-                      width={wdth}
-                      height={wdth}
-                      // layout='fill'
-                      sx={{ objectFit: 'contain' }}
-                      priority={true}
-                      src={`/img/card-loader.jpg`}
-                      alt="card-loader"
-                    />
-                  </SimpleListItem>
-                ))
-              }
+          </Box>
 
-            </List>
-          </Grid>
+          <List sx={{
+            transform: `translateX(-${sliderCount * wdth}px)`,
+            padding: "0 !important",
+            display: "flex",
+            position: 'relative',
+            width: `${simpleModel?.images?.length * wdth}px`,
+            transition: `all ${sliderTransition}s ease`
+          }}>
+            {
+              simpleModel?.images?.map((slide: any, index: number) => (
+                <SimpleListItem
+                  className="MuiListItem-slider__big--item"
+                  onClick={(e) => { dispatch(setShowModelsModal(true)) }}
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <SimpleImage
+                    alt=''
+                    layout='fill'
+                    sx={{ objectFit: name == 'slider' ? 'cover' : 'contain' }}
+                    src={`${IMAGES_BASE_URL}/${slide?.image_src}`}
+                    priority={true}
+                  />
+                </SimpleListItem>
+              ))
+            }
+
+          </List>
         </Grid>
-      </Box>
+      </Grid>
+    )
+  } else {
+    return (
+      <Grid
+        sx={
+          name === "slider" ? {
+            display: "flex",
+            flexDirection: "unset",
+            marginTop: "20px",
+            ...sx
+          } : {
+            display: "flex",
+            flexDirection: "column-reverse",
+            ...sx
+          }
+        }
+        container={name === "slider" ? true : false}
+        spacing={name === "slider" ? 2 : 1}
+        item
+        xs={name === "slider" ? 6 : 12}
+      >
+        <Grid
+          sx={name === "slider" ? { padding: "0 0 0 18px !important" } :
+            {
+              padding: "11px !important",
+              display: "flex",
+              justifyContent: "center"
+            }
+          }
+          xs={name === "slider" ? 2 : 12}
+          item
+        >
+          <List
+            sx={{
+              padding: "0 !important",
+              display: `${name === "slider" ? "block" : "flex"}`
+            }}
+          >
+            {
+              fakeModelImages.map((slide: any, index: number) => (
+                <SimpleListItem
+                  sx={name === "slider" ? { margin: "0 0 8px 0" } : { margin: "0 8px 0 0" }}
+                  className={`${sliderCount == index ? "MuiListItem-slider__item--active" : ""}`}
+                  onClick={() => setSliderCount(index)}
+                  key={index}
+                >
+                  <Image
+                    loader={myLoader}
+                    width={56}
+                    height={56}
+                    alt="slider"
+                    src={`/img/card-loader.jpg`}
+                  />
+                </SimpleListItem>
+              ))
+            }
+
+          </List>
+        </Grid>
+        <Grid
+          sx={name === "slider" ?
+            { overflow: "hidden", position: "relative", padding: "0 0 18px 0 !important" } : { padding: "0 !important", overflow: "hidden" }}
+          item
+          xs={name === "slider" ? 10 : 12}
+        >
+          <Buttons
+            onClick={SliderRightHandler}
+            type="button"
+            className="slider__right--arrow"
+            name=""
+          >
+            <Image
+              alt="Icons"
+              src="/icons/slider-arrow-right.svg"
+              width={9}
+              height={14}
+            />
+          </Buttons>
+          <Buttons
+            onClick={SliderLeftHandler}
+            type="button"
+            className="slider__left--arrow"
+            name=""
+          >
+            <Image
+              alt="Icons"
+              src="/icons/slider-arrow-left.svg"
+              width={9}
+              height={14}
+            />
+          </Buttons>
+          <List sx={{
+            transform: `translateX(-${sliderCount * wdth}px)`,
+            padding: "0 !important",
+            display: "flex",
+            position: 'relative',
+            width: `${simpleModel?.images?.length * wdth}px`,
+            transition: `all ${sliderTransition}s ease`
+          }}>
+            {
+              fakeModelImages.map((slide: any, index: number) => (
+                <SimpleListItem
+                  className="MuiListItem-slider__big--item"
+                  onClick={(e) => { dispatch(setShowModelsModal(true)) }}
+                  key={index}
+                >
+                  <SimpleImage
+                    loader={myLoader}
+                    width={wdth}
+                    height={wdth}
+                    // layout='fill'
+                    sx={{ objectFit: 'contain' }}
+                    priority={true}
+                    src={`/img/card-loader.jpg`}
+                    alt="card-loader"
+                  />
+                </SimpleListItem>
+              ))
+            }
+
+          </List>
+        </Grid>
+      </Grid>
     )
   }
 }

@@ -61,7 +61,7 @@ export default function OneModel() {
               lg={6}
               xl={6}
             >
-              <ProductSlider name="slider" sx={{ position: 'fixed' }} />
+              <ProductSlider name="slider" sx={{ width: '640px', position: 'fixed' }} />
             </Grid>
 
             <Grid
