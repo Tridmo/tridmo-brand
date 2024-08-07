@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../utils/axios'
+import { modelsLimit } from '../types/filters';
 
 const initialState = {
   data: [],
@@ -31,7 +32,7 @@ export const getBrandModels = createAsyncThunk('/models/?brand_id=id',
     send__route +=
       wrapper?.limit
         ? (send__route?.includes("/?") ? `&limit=${wrapper?.limit}` : `/?limit=${wrapper?.limit}`)
-        : "";
+        : (send__route?.includes("/?") ? `&limit=${modelsLimit}` : `/?limit=${modelsLimit}`);
 
     send__route +=
       wrapper?.orderBy

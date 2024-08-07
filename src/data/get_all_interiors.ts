@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../utils/axios'
+import { interiorsLimit } from '../types/filters';
 
 const initialState = {
   data: [],
@@ -34,7 +35,7 @@ export const getAllInteriors = createAsyncThunk('/interiors',
     send__route +=
       wrapper?.limit
         ? (send__route?.includes("/?") ? `&limit=${wrapper?.limit}` : `/?limit=${wrapper?.limit}`)
-        : "";
+        : (send__route?.includes("/?") ? `&limit=${interiorsLimit}` : `/?limit=${interiorsLimit}`);
 
     send__route +=
       wrapper?.orderBy

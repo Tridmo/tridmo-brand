@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../utils/axios'
-import { order, usersOrderBy } from '../types/filters';
+import { designersLimit, modelDownloadersLimit, order, usersOrderBy } from '../types/filters';
 
 const initialState = {
   data: [],
@@ -32,7 +32,7 @@ export const getAllDesigners = createAsyncThunk('/users/designers',
     send__route +=
       wrapper?.limit
         ? (send__route?.includes("/?") ? `&limit=${wrapper?.limit}` : `/?limit=${wrapper?.limit}`)
-        : "";
+        : (send__route?.includes("/?") ? `&limit=${designersLimit}` : `/?limit=${designersLimit}`);
 
     send__route +=
       wrapper?.orderBy
@@ -77,7 +77,7 @@ export const getModelDownloaders = createAsyncThunk('/users/designers/model',
     send__route +=
       wrapper?.orderBy
         ? (send__route?.includes("/?") ? `&orderBy=${wrapper?.orderBy}` : `/?orderBy=${wrapper?.orderBy}`)
-        : "";
+        : (send__route?.includes("/?") ? `&limit=${modelDownloadersLimit}` : `/?limit=${modelDownloadersLimit}`);
 
     send__route +=
       wrapper?.order
