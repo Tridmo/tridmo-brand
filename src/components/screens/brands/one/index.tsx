@@ -16,24 +16,6 @@ import { setRouteCrumbs } from "../../../../data/route_crumbs";
 import BrandModels from "../../../views/brand/brand_models";
 
 export default function OneBrand() {
-  const isAuthenticated = useSelector(
-    (state: any) => state?.auth_slicer?.authState
-  );
-  const dispatch = useDispatch()
-  const brand = useSelector(selectOneBrand);
-  const brandModels = useSelector(selectBrandModels);
-
-  React.useEffect(() => {
-    dispatch(setRouteCrumbs(
-      [{
-        title: 'Бренды',
-        route: '/brands'
-      }, {
-        title: brand?.name,
-        route: `/brands/${brand?.slug}`
-      }]
-    ))
-  }, [])
 
   return (
     <>
@@ -43,14 +25,14 @@ export default function OneBrand() {
           sx={{
             maxWidth: "1200px",
             width: "100%",
-            margin: "0 auto !important",
+            margin: "32px auto !important",
             alignItems: "center",
           }}
         >
 
           <BrandInfo />
 
-          <Divider sx={{ marginBottom: "32px" }} />
+          {/* <Divider sx={{ marginBottom: "32px" }} />
 
           <Grid spacing={2}>
             <Grid sx={{ mb: brandModels?.length > 0 ? "32px" : "76px" }}>
@@ -75,7 +57,7 @@ export default function OneBrand() {
               <BrandModels />
 
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
     </>

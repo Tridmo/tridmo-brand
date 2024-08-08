@@ -7,11 +7,11 @@ import ConnectionError from '@/components/site_info/connection_error';
 import { Box, Grid } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { selectMyProfile } from '../../data/me';
-import { getProfile } from '../../data/get_profile';
-import OneBrand from '../../components/screens/brands/one';
-import { getOneBrand } from '../../data/get_one_brand';
-import { setRouteCrumbs } from '../../data/route_crumbs';
+import { selectMyProfile } from '../../../data/me';
+import { getProfile } from '../../../data/get_profile';
+import OneBrand from '../../../components/screens/brands/one';
+import { getOneBrand } from '../../../data/get_one_brand';
+import EditBrand from '../../../components/screens/brands/edit';
 
 const LoaderStyle = {
   // width: "100px !important",
@@ -57,20 +57,11 @@ export default function UserProfile() {
     }
   }, [profile])
 
-  React.useEffect(() => {
-    dispatch(setRouteCrumbs(
-      [{
-        title: 'Профиль бренда',
-        route: '/profile'
-      }]
-    ))
-  }, [])
-
   if (getBrandStatus === "succeeded") {
     return (
       <>
         <Box sx={{ background: "#fafafa" }}>
-          <OneBrand />
+          <EditBrand />
         </Box>
       </>
     )

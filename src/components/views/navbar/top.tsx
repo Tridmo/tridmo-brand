@@ -17,10 +17,12 @@ import { selectToggleCardActionStatus, switch_on } from '../../../data/toggle_ca
 import { setAuthState } from '../../../data/login';
 import Cookies from 'js-cookie'
 import RouteCrumbs from './route_crumbs';
-import { ChatOutlined } from '@mui/icons-material';
+import { ChatOutlined, Person } from '@mui/icons-material';
 import { selectNotificationCounts, selectNotificationCountsStatus, selectNotifications } from '../../../data/get_notifications';
 import { selectChatUnread } from '../../../data/chat';
 import { IMAGES_BASE_URL } from '../../../utils/env_vars';
+import { ConfirmContextProps, resetConfirmData, resetConfirmProps, setConfirmProps, setConfirmState, setOpenModal } from '../../../data/modal_checker';
+import { toast } from 'react-toastify';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -84,6 +86,32 @@ export default function NavbarTop() {
     dispatch(switch_on(true))
   }
 
+  function handleClickLogout() {
+    const modalContent: ConfirmContextProps = {
+      message: `Вы уверены, что хотите выйти из аккаунта?`,
+      actions: {
+        on_click: {
+          args: [],
+          func: async () => {
+            dispatch(setConfirmProps({ is_loading: true }))
+            handleLogout()
+            handleClose();
+            router.refresh()
+            router.push('/login')
+            dispatch(setConfirmState(false))
+            dispatch(setOpenModal(false))
+            dispatch(resetConfirmProps())
+            dispatch(resetConfirmData())
+          }
+        }
+      }
+    }
+    dispatch(resetConfirmProps())
+    dispatch(setConfirmProps(modalContent))
+    dispatch(setConfirmState(true))
+    dispatch(setOpenModal(true))
+  }
+
   return (
     <>
       {/* <BasicModal /> */}
@@ -102,7 +130,16 @@ export default function NavbarTop() {
         >
 
           <MenuItem
-            onClick={handleLogout}
+            sx={{ padding: "6px 12px" }}
+          >
+            <Link href='/profile' style={{ display: 'flex' }}>
+              <Person sx={{ width: '17px', color: '#424242' }} />
+              <SimpleTypography className='drow-down__text' text='Профиль бренда' />
+            </Link>
+          </MenuItem>
+
+          <MenuItem
+            onClick={handleClickLogout}
             sx={{ padding: "6px 12px" }}
           >
             <Image

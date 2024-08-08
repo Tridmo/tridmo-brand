@@ -20,6 +20,8 @@ import MultipleSelect from '../../../inputs/multiple_select';
 import { getOneBrand, selectOneBrand } from "../../../../data/get_one_brand";
 import { IMAGES_BASE_URL } from "../../../../utils/env_vars";
 import { setRouteCrumbs } from "../../../../data/route_crumbs";
+import { compareArrays } from "../../../../utils";
+import { getMyProfile, selectMyProfile } from "../../../../data/me";
 
 const availabilityData = [
   {
@@ -61,25 +63,19 @@ const labelStyle: CSSProperties = {
   margin: '0 0 6px 0',
 }
 
-export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
-  const stylesData = useSelector(selectAllStyles)
-  const brand = useSelector(selectOneBrand)
-
-  const dispatch = useDispatch<any>()
+export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, brand?: any }) {
   const router = useRouter()
+  const dispatch = useDispatch<any>()
+  const stylesData = useSelector(selectAllStyles)
+  const profile = useSelector(selectMyProfile)
+
 
   if (editing) {
     useEffect(() => {
       dispatch(setRouteCrumbs(
         [{
-          title: 'Бренды',
-          route: '/brands'
-        }, {
-          title: brand?.name,
-          route: `/brands/${brand?.slug}`
-        }, {
-          title: 'Редактировать',
-          route: `/brands/edit/${brand?.slug}`
+          title: 'Редактировать профиль бренда',
+          route: '/profile/edit'
         }]
       ))
     }, [])
@@ -92,10 +88,11 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
     address: any,
     phone: any,
     email: any,
+    instagram: any,
     styles: any[],
     image: any,
-    username: any,
-    password: any,
+    // username: any,
+    // password: any,
     submit: any
   }
   const initialData: DataInterface = {
@@ -105,10 +102,11 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
     address: editing && brand?.address ? brand?.address : '',
     phone: editing && brand?.phone ? brand?.phone : '',
     email: editing && brand?.email ? brand?.email : '',
+    instagram: editing && brand?.instagram ? brand?.instagram : '',
     styles: [],
     image: '',
-    username: '',
-    password: '',
+    // username: '',
+    // password: '',
     submit: null
   }
 
@@ -123,9 +121,7 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
     >
       <Box sx={{ width: '100%' }}>
         <Formik
-
           initialValues={initialData}
-
           validationSchema={
             Yup.object().shape(
               editing ? {
@@ -133,22 +129,24 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
                 site_link: Yup.string().url('Введите ссылку').optional(),
                 address: Yup.string().optional(),
                 phone: Yup.number().optional(),
-                email: Yup.string().max(255).optional(),
+                email: Yup.string().optional(),
+                instagram: Yup.string().optional(),
                 description: Yup.string().max(255).optional(),
                 username: Yup.string().max(32).optional(),
                 password: Yup.string().min(6).optional(),
-                styles: Yup.array().of(Yup.number()).min(1, 'Выберите хотя бы один стиль').max(3).optional(),
+                styles: Yup.array().of(Yup.number()).optional(),
                 image: Yup.mixed().optional(),
               } : {
                 name: Yup.string().max(255).required('Название не указано'),
                 site_link: Yup.string().url('Введите ссылку').required('Ссылка на сайт не указано'),
                 address: Yup.string().required('Адрес не указано'),
                 phone: Yup.number().required('Номер телефона не указано'),
-                email: Yup.string().max(255).required('Электронная почта не указано'),
+                email: Yup.string().optional(),
+                instagram: Yup.string().optional(),
                 description: Yup.string().max(255).required('Описание не указано'),
                 username: Yup.string().max(32).required('Имя пользователя не указано'),
                 password: Yup.string().min(6).required('Пароль не указано'),
-                styles: Yup.array().of(Yup.number()).min(1, 'Выберите хотя бы один стиль').max(3).required('Стили не указано'),
+                styles: Yup.array().of(Yup.number()).optional(),
                 image: Yup.mixed().required('Загрузите изображение'),
               }
             )
@@ -160,17 +158,20 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
 
               const formData = new FormData()
 
-              if (editing) {
-                if (_values.name) formData.append('name', _values.name)
-                if (_values.site_link) formData.append('site_link', _values.site_link)
-                if (_values.description) formData.append('description', _values.description)
-                if (_values.address) formData.append('address', _values.address)
-                if (_values.phone) formData.append('phone', _values.phone)
-                if (_values.email) formData.append('email', _values.email)
-                if (_values.username) formData.append('username', _values.username)
-                if (_values.password) formData.append('password', _values.password)
+              if (editing && brand) {
+                if (_values.name != brand?.name) formData.append('name', _values.name)
+                if (_values.site_link != brand?.site_link) formData.append('site_link', _values.site_link)
+                if (_values.description != brand?.description) formData.append('description', _values.description)
+                if (_values.address != brand?.address) formData.append('address', _values.address)
+                if (_values.phone != brand?.phone) formData.append('phone', _values.phone)
+                if (_values.email != brand?.email) formData.append('email', _values.email)
+                if (_values.instagram != brand?.instagram) formData.append('instagram', _values.instagram)
+                // if (_values.username != brand?.username) formData.append('username', _values.username)
+                // if (_values.password != brand?.password) formData.append('password', _values.password)
                 if (_values.image) formData.append('image', _values.image)
-                if (_values.styles && _values.styles?.length) {
+                if (_values.styles != brand?.styles && _values.styles?.length &&
+                  compareArrays(_values.styles, brand?.styles?.map(c => c?.style?.id)) == false
+                ) {
                   if (_values.styles?.length > 1)
                     _values.styles.forEach(i => formData.append('styles', i));
                   else if (_values.styles?.length != 0)
@@ -184,8 +185,9 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
                 formData.append('address', _values.address)
                 formData.append('phone', _values.phone)
                 formData.append('email', _values.email)
-                formData.append('username', _values.username)
-                formData.append('password', _values.password)
+                formData.append('instagram', _values.instagram)
+                // formData.append('username', _values.username)
+                // formData.append('password', _values.password)
                 formData.append('image', _values.image)
                 if (_values.styles && _values.styles?.length) {
                   if (_values.styles?.length > 1)
@@ -211,7 +213,11 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
               setSubmitting(false);
               resetForm()
 
-              // router.push(`/brands/${res?.data?.data?.brand?.slug}`)
+              dispatch(getMyProfile({}))
+              dispatch(getOneBrand(brand?.id))
+
+              router.refresh()
+              router.push(`/profile`)
 
             } catch (err: any) {
               setStatus({ success: false });
@@ -352,6 +358,23 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
                         variant='outlined'
                         paddingX={12}
                         paddingY={12}
+                        error={Boolean(touched.instagram && errors.instagram)}
+                        helperText={touched.instagram && errors.instagram}
+                        name="instagram"
+                        type="text"
+                        autoComplete="off"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.instagram}
+                        label="Инстаграм"
+                        labelFixed
+                        placeholderText="ссылка или имя пользователя"
+                      />
+                      <SimpleInp
+                        className='input_width'
+                        variant='outlined'
+                        paddingX={12}
+                        paddingY={12}
                         error={Boolean(touched.phone && errors.phone)}
                         helperText={touched.phone && errors.phone}
                         name="phone"
@@ -433,7 +456,7 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
 
                 </Grid>
 
-                <Box sx={{ margin: '40px 0 20px 0' }}>
+                {/* <Box sx={{ margin: '40px 0 20px 0' }}>
                   <SimpleTypography
                     text="Учетные данные для администратора бренда"
                     sx={{
@@ -444,8 +467,8 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
                       textAlign: 'left',
                     }}
                   />
-                </Box>
-                <Grid container
+                </Box> */}
+                {/* <Grid container
                   sx={{
                     width: '100%',
                     display: 'flex',
@@ -518,7 +541,7 @@ export function AddBrandForm({ editing, ...props }: { editing?: boolean }) {
                     </Box>
                   </Grid>
 
-                </Grid>
+                </Grid> */}
 
                 <Box sx={{ marginTop: '40px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                   <Buttons

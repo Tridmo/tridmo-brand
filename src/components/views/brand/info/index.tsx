@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { sampleBrand } from '@/data/samples';
 import { selectOneBrand } from '../../../../data/get_one_brand';
 import { IMAGES_BASE_URL } from '../../../../utils/env_vars';
-import { Instagram } from '@mui/icons-material';
 
 
 export default function BrandInfo() {
@@ -26,6 +25,29 @@ export default function BrandInfo() {
 
   const dispatch = useDispatch<any>();
   const brand = useSelector(selectOneBrand);
+
+  function getSocialLink(urls: string[], target: string, connector: string = '/') {
+    const has = urls.find(url => target.startsWith(url))
+    return target ? (
+      !!has
+        ? target
+        : `${urls[0]}${connector}${target}`
+    ) : urls[0]
+  }
+
+  function getSocialLinkUsername(urls: string[], target: string) {
+    const has = urls.find(url => target.startsWith(url))
+    return target ? (
+      !!has
+        ? target.split(has)[1]
+        : target
+    ) : ''
+  }
+
+  function getUrlDomen(url: string) {
+    let domen = url.replace('http://', '').replace('https://', '')
+    return domen;
+  }
 
   return (
 
@@ -72,7 +94,7 @@ export default function BrandInfo() {
             />
           </Grid>
           <Grid item>
-            <Link href={`/brands/edit/${brand?.slug}`}>
+            <Link href={`/profile/edit`}>
               <Buttons
                 name='Редактировать'
                 className="login__btn"
@@ -146,15 +168,17 @@ export default function BrandInfo() {
             </Link>
           </Grid>
           <Grid item>
-            <Link style={{ width: '100%' }} href={brand?.instagram?.startsWith('https://instagram.com/') ? brand?.instagram : `https://instagram.com/${brand?.instagram}`}>
+            <Link href={`mailto:${brand?.email}`}>
               <Buttons className='brand__box' name="">
-                <Instagram sx={{
-                  width: '19px',
-                  height: '23px'
-                }} />
+                <Image
+                  width={19}
+                  height={23}
+                  alt="Email"
+                  src={"/icons/mail.svg"}
+                />
                 <Box sx={{ marginLeft: "11px" }}>
-                  <SimpleTypography className='brand__name' text="Инстаграм" />
-                  <SimpleTypography className='brand__box--text' text={`${brand?.instagram}`} />
+                  <SimpleTypography className='brand__name' text="Электрон Почта" />
+                  <SimpleTypography className='brand__box--text' text={`${brand?.email}`} />
                 </Box>
               </Buttons>
             </Link>
@@ -174,7 +198,28 @@ export default function BrandInfo() {
                   <SimpleTypography className='brand__name' text="Веб-сайт" />
                   <SimpleTypography
                     className='brand__box--text'
-                    text={brand?.name}
+                    text={getUrlDomen(brand?.site_link || '')}
+                  />
+                </Box>
+              </Buttons>
+            </a>
+          </Grid>
+          <Grid item>
+            <a target="_blank"
+              href={getSocialLink(['https://instagram.com/', 'https://www.instagram.com/'], brand?.instagram)}
+            >
+              <Buttons className='brand__box' name="">
+                <Image
+                  width={19}
+                  height={23}
+                  alt="web"
+                  src={"/icons/web.svg"}
+                />
+                <Box sx={{ marginLeft: "11px" }}>
+                  <SimpleTypography className='brand__name' text="Инстаграм" />
+                  <SimpleTypography
+                    className='brand__box--text'
+                    text={getSocialLinkUsername(['https://instagram.com/', 'https://www.instagram.com/'], brand?.instagram)}
                   />
                 </Box>
               </Buttons>
@@ -194,7 +239,7 @@ export default function BrandInfo() {
                       />
                       <Box sx={{ marginLeft: "11px" }}>
                         <SimpleTypography className='brand__name' text="Стиль" />
-                        <SimpleTypography className='brand__box--text' text={`${brand?.styles?.[0]?.name}`} />
+                        <SimpleTypography className='brand__box--text' text={`${brand?.styles[0]?.name}`} />
                       </Box>
                     </Buttons>
                   </Box>

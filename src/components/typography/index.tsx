@@ -403,6 +403,10 @@ const TypographyWrapper = styled(Typography)(
       }
 
       &.MuiTypography-brand__box--text{
+        width: 180px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         text-align:start;
         font-size: 14px;
         line-height: 17px;
