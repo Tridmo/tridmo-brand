@@ -178,7 +178,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     dispatch(setRouteCrumbs([{
-      title: 'Пользователи',
+      title: 'Загрузки',
       route: '/users'
     }]))
   }, [])
@@ -253,7 +253,7 @@ export default function UsersPage() {
             <List
               sx={listSx}
             >
-              <ListItem alignItems="center"
+              {/* <ListItem alignItems="center"
                 key={-3}
                 sx={{
                   ...liHeaderSx,
@@ -305,7 +305,7 @@ export default function UsersPage() {
                     />
                   </Box>
                 </Buttons>
-              </ListItem>
+              </ListItem> */}
               <ListItem alignItems="center"
                 key={-2}
                 sx={liHeaderSx}
