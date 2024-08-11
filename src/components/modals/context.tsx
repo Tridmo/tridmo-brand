@@ -112,6 +112,7 @@ export const LoginContext = (props: LoginContextProps) => {
 
             router.refresh();
             router.prefetch('/stats');
+            router.push('/stats');
 
           } catch (err: any) {
             setStatus({ success: false });
