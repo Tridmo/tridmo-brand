@@ -37,8 +37,7 @@ export const getAllDesigners = createAsyncThunk('/users/designers',
     send__route +=
       wrapper?.orderBy
         ? (send__route?.includes("/?") ? `&orderBy=${wrapper?.orderBy}` : `/?orderBy=${wrapper?.orderBy}`)
-        : (send__route?.includes("/?") ? `&orderBy=downloaded_at` : `/?orderBy=downloaded_at`);
-
+        : "";
 
     send__route +=
       wrapper?.order
@@ -73,12 +72,12 @@ export const getModelDownloaders = createAsyncThunk('/users/designers/model',
     send__route +=
       wrapper?.limit
         ? (send__route?.includes("/?") ? `&limit=${wrapper?.limit}` : `/?limit=${wrapper?.limit}`)
-        : (send__route?.includes("/?") ? `&limit=${modelDownloadersLimit}` : `/?limit=${modelDownloadersLimit}`);
+        : "";
 
     send__route +=
       wrapper?.orderBy
         ? (send__route?.includes("/?") ? `&orderBy=${wrapper?.orderBy}` : `/?orderBy=${wrapper?.orderBy}`)
-        : (send__route?.includes("/?") ? `&orderBy=downloaded_at` : `/?orderBy=downloaded_at`);
+        : (send__route?.includes("/?") ? `&limit=${modelDownloadersLimit}` : `/?limit=${modelDownloadersLimit}`);
 
     send__route +=
       wrapper?.order
