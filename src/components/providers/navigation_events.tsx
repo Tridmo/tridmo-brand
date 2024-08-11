@@ -11,7 +11,7 @@ import { setAuthState } from '../../data/login'
 import { setVerifyState } from '../../data/modal_checker'
 import useHash from '../hooks/use_hash'
 import { setAuthToken } from '../../utils/axios'
-import { getNotifications } from '../../data/get_notifications'
+import { getNotificationCounts, getNotifications } from '../../data/get_notifications'
 const NavigationContext = createContext({})
 
 export function NavigationEvents() {
@@ -23,7 +23,7 @@ export function NavigationEvents() {
   const hash = useHash();
 
   useEffect(() => {
-    dispatch(getNotifications())
+    dispatch(getNotificationCounts())
   }, [])
 
   return (

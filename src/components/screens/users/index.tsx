@@ -104,12 +104,12 @@ const listSx: SxProps = {
 const widthControl = {
 
   '&:nth-of-type(1)': {
-    minWidth: '45%',
-    maxWidth: '45%',
+    minWidth: '40%',
+    maxWidth: '40%',
   },
   '&:nth-of-type(2)': {
-    minWidth: '45%',
-    maxWidth: '45%',
+    minWidth: '40%',
+    maxWidth: '40%',
   },
   '&:nth-of-type(3)': {
     minWidth: '10%',
@@ -634,20 +634,6 @@ export default function UsersPage() {
                               />
                             </ListItemText>
                             <ListItemText sx={{ ...widthControl }}>
-                              <Skeleton
-                                variant="rectangular"
-                                width={56}
-                                height={20}
-                              />
-                            </ListItemText>
-                            <ListItemText sx={{
-                              ...widthControl,
-                              '& > span:first-of-type': {
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                              }
-                            }}>
                               <Skeleton
                                 variant="rectangular"
                                 width={56}

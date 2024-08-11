@@ -87,7 +87,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
     description: any,
     address: any,
     phone: any,
-    email: any,
+    email?: any,
     instagram: any,
     styles: any[],
     image: any,
@@ -101,7 +101,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
     description: editing && brand?.description ? brand?.description : '',
     address: editing && brand?.address ? brand?.address : '',
     phone: editing && brand?.phone ? brand?.phone : '',
-    email: editing && brand?.email ? brand?.email : '',
+    // email: editing && brand?.email ? brand?.email : '',
     instagram: editing && brand?.instagram ? brand?.instagram : '',
     styles: [],
     image: '',
@@ -129,7 +129,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
                 site_link: Yup.string().url('Введите ссылку').optional(),
                 address: Yup.string().optional(),
                 phone: Yup.number().optional(),
-                email: Yup.string().optional(),
+                // email: Yup.string().optional(),
                 instagram: Yup.string().optional(),
                 description: Yup.string().max(255).optional(),
                 username: Yup.string().max(32).optional(),
@@ -164,7 +164,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
                 if (_values.description != brand?.description) formData.append('description', _values.description)
                 if (_values.address != brand?.address) formData.append('address', _values.address)
                 if (_values.phone != brand?.phone) formData.append('phone', _values.phone)
-                if (_values.email != brand?.email) formData.append('email', _values.email)
+                // if (_values.email != brand?.email) formData.append('email', _values.email)
                 if (_values.instagram != brand?.instagram) formData.append('instagram', _values.instagram)
                 // if (_values.username != brand?.username) formData.append('username', _values.username)
                 // if (_values.password != brand?.password) formData.append('password', _values.password)
@@ -184,7 +184,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
                 formData.append('description', _values.description)
                 formData.append('address', _values.address)
                 formData.append('phone', _values.phone)
-                formData.append('email', _values.email)
+                // formData.append('email', _values.email)
                 formData.append('instagram', _values.instagram)
                 // formData.append('username', _values.username)
                 // formData.append('password', _values.password)
@@ -387,7 +387,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
                         labelFixed
                         placeholderText="Введите номер телефона"
                       />
-                      <SimpleInp
+                      {/* <SimpleInp
                         className='input_width'
                         variant='outlined'
                         paddingX={12}
@@ -403,7 +403,7 @@ export function AddBrandForm({ editing, brand, ...props }: { editing?: boolean, 
                         label="Электронная почта"
                         labelFixed
                         placeholderText="example@example.com"
-                      />
+                      /> */}
                       <SimpleInp
                         className='input_width'
                         variant='outlined'

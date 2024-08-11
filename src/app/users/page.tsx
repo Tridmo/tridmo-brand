@@ -31,7 +31,7 @@ export default function Users() {
         dispatch(getAllDesigners({
           brand_id: profile?.brand?.id,
           key: getUserNameFilter,
-          orderBy: getUsersOrderBy,
+          orderBy: getUsersOrderBy || 'downloaded_at',
           order: getUsersOrder,
         }))
       }

@@ -77,7 +77,7 @@ const CheckoutBar = () => {
 
   function fetchInitial() {
     if (isAuthenticated) {
-      dispatch(getNotificationCounts());
+      dispatch(getNotifications());
     }
   }
 
@@ -89,8 +89,6 @@ const CheckoutBar = () => {
         fetched = notificationsData.data.notifications.filter(
           (ntf) => !existingIds.has(ntf.id)
         );
-        console.log([...prevNotifications, ...fetched]);
-
         return [...prevNotifications, ...fetched];
       });
       markAsSeenVisible(fetched.map(e => e.id))
@@ -114,7 +112,10 @@ const CheckoutBar = () => {
   const markAsSeenAll = async () => {
     try {
       const res = await instance.put(`/notifications/all`);
-      if (res?.data?.success) setAllSeen(true)
+      if (res?.data?.success) {
+        setAllSeen(true)
+      }
+      dispatch(getNotificationCounts())
     } catch (error) {
       console.error(error);
     }
