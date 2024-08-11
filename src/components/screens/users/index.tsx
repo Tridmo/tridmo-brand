@@ -619,35 +619,35 @@ export default function UsersPage() {
                               </Box>
                             </ListItemText>
 
-                            <ListItemText sx={{ ...widthControl }} >
-                              <Skeleton
-                                variant="rectangular"
-                                width={56}
-                                height={20}
-                              />
-                            </ListItemText>
-                            <ListItemText sx={{ ...widthControl }}>
-                              <Skeleton
-                                variant="rectangular"
-                                width={56}
-                                height={20}
-                              />
-                            </ListItemText>
-                            <ListItemText sx={{ ...widthControl }}>
-                              <Skeleton
-                                variant="rectangular"
-                                width={56}
-                                height={20}
-                              />
-                            </ListItemText>
                             <ListItemText sx={{
                               ...widthControl,
                               '& > span:first-of-type': {
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'flex-start'
                               }
                             }}>
+                              <Skeleton
+                                variant="rectangular"
+                                width={36}
+                                height={36}
+                              />
+                              <Box sx={{ marginLeft: '24px' }}>
+                                <Skeleton
+                                  variant="rectangular"
+                                  width={100}
+                                  height={16}
+                                  sx={{ marginBottom: '5px' }}
+                                />
+                                <Skeleton
+                                  variant="rectangular"
+                                  width={80}
+                                  height={14}
+                                />
+                              </Box>
+                            </ListItemText>
+
+                            <ListItemText sx={{ ...widthControl }}>
                               <Skeleton
                                 variant="rectangular"
                                 width={56}

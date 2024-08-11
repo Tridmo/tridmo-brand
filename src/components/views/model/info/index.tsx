@@ -180,11 +180,11 @@ export default function ModelInfo() {
                   className="table__text"
                 />
                 <SimpleTypography
-                  text={`Высота: ${simpleModel?.height} см`}
+                  text={`Длина: ${simpleModel?.length} см`}
                   className="table__text"
                 />
                 <SimpleTypography
-                  text={`Длина: ${simpleModel?.length} см`}
+                  text={`Высота: ${simpleModel?.height} см`}
                   className="table__text"
                 />
               </TableCell>

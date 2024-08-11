@@ -166,9 +166,9 @@ export default function BasicPagination({ dataSource, dataId, count, page, ...pr
   const get_model_interiors_page = useSelector((state: any) => state?.handle_filters?.model_interiors_page)
 
   // ---- model-downloaders filters selector ----- //
-  const getDownloadersNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_name)
-  const getDownloadersOrderBy = useSelector((state: any) => state?.handle_filters?.downloaders_orderby)
-  const getDownloadersOrder = useSelector((state: any) => state?.handle_filters?.downloaders_order)
+  const getDownloadersNameFilter = useSelector((state: any) => state?.handle_filters?.model_downloaders_name)
+  const getDownloadersOrderBy = useSelector((state: any) => state?.handle_filters?.model_downloaders_orderby)
+  const getDownloadersOrder = useSelector((state: any) => state?.handle_filters?.model_downloaders_order)
 
   const handleChange = (e: any, page: any) => {
 
