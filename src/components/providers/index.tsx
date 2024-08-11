@@ -25,6 +25,7 @@ export default function Providers({
         <AuthProvider>
           <ThemeProviderWrapper>
             <WeavyProvider>
+              <NavigationEvents />
               {children}
             </WeavyProvider>
           </ThemeProviderWrapper>

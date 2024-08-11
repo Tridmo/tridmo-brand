@@ -15,12 +15,7 @@ import { getNotificationCounts, getNotifications } from '../../data/get_notifica
 const NavigationContext = createContext({})
 
 export function NavigationEvents() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
   const dispatch = useDispatch<any>();
-  const router = useRouter();
-  const params = useParams();
-  const hash = useHash();
 
   useEffect(() => {
     dispatch(getNotificationCounts())
