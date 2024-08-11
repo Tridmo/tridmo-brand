@@ -111,8 +111,7 @@ export const LoginContext = (props: LoginContextProps) => {
             setSubmitting(false);
 
             router.refresh();
-            router.prefetch('/stats');
-            router.push('/stats');
+            router.push('/');
 
           } catch (err: any) {
             setStatus({ success: false });
