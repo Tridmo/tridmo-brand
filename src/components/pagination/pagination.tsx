@@ -13,6 +13,7 @@ import { current } from '@reduxjs/toolkit';
 import { getDesignerDownloads } from '../../data/get_designer_downloads';
 import { getModelInteriors } from '../../data/get_model_interiors';
 import { selectMyProfile } from '../../data/me';
+import { getAllDownloads } from '../../data/get_all_downloads';
 
 const SimplePagination = styled(Pagination)(
   ({ theme }: ThemeProps) =>
@@ -115,6 +116,7 @@ interface PaginationProps {
   'interiors' |
   'brand_models' |
   'brands' |
+  'downloads' |
   'designers' |
   'designer_downloads' |
   'designer_interiors' |
@@ -169,6 +171,11 @@ export default function BasicPagination({ dataSource, dataId, count, page, ...pr
   const getDownloadersNameFilter = useSelector((state: any) => state?.handle_filters?.model_downloaders_name)
   const getDownloadersOrderBy = useSelector((state: any) => state?.handle_filters?.model_downloaders_orderby)
   const getDownloadersOrder = useSelector((state: any) => state?.handle_filters?.model_downloaders_order)
+
+  const getDownloadsUserNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_name)
+  const getDownloadsModelNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_model_name)
+  const getDownloadsOrderBy = useSelector((state: any) => state?.handle_filters?.downloaders_orderby)
+  const getDownloadsOrder = useSelector((state: any) => state?.handle_filters?.downloaders_order)
 
   const handleChange = (e: any, page: any) => {
 
@@ -252,6 +259,17 @@ export default function BasicPagination({ dataSource, dataId, count, page, ...pr
         key: getDownloadersNameFilter,
         orderBy: getDownloadersOrderBy,
         order: getDownloadersOrder,
+      }))
+    }
+    if (dataSource == 'downloads') {
+      dispatch(setPageFilter({ p: 'downloaders_page', n: page }))
+      dispatch(getAllDownloads({
+        page: page,
+        brand_id: dataId,
+        user_name: getDownloadsUserNameFilter,
+        model_name: getDownloadsModelNameFilter,
+        orderBy: getDownloadsOrderBy,
+        order: getDownloadsOrder,
       }))
     }
   }

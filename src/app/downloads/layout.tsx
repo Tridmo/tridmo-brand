@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "@/components/views/navbar"
 import RightBar from '../../components/right_bar';
 
-export default function UsersLayout({
+export default function DownloadsLayout({
   children,
 }: {
   children: React.ReactNode

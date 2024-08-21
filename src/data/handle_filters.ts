@@ -24,6 +24,12 @@ const initialState = {
   downloaded_model_orderby: '',
   downloaded_model_order: 'desc',
 
+  downloaders_name: '',
+  downloaders_model_name: '',
+  downloaders_orderby: '',
+  downloaders_order: '',
+  downloaders_page: 1,
+
   brand_models_top: undefined,
   brand_models_name: '',
   brand_models_categories: [],
@@ -318,6 +324,23 @@ const handle_filters = createSlice({
       state.model_downloaders_order = params.model_downloaders_order;
     },
 
+    set_downloaders_name: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.downloaders_name = action.payload;
+    },
+    set_downloaders_model_name: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.downloaders_model_name = action.payload;
+    },
+    set_downloaders_orderby: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.downloaders_orderby = action.payload;
+    },
+    set_downloaders_order: (state: any, action: PayloadAction<any>) => {
+      const { ...params } = action.payload;
+      state.downloaders_order = action.payload;
+    },
+
     setPageFilter: (
       state: any,
       action: PayloadAction<{
@@ -330,6 +353,7 @@ const handle_filters = createSlice({
         'model_downloaders_page' |
         'brand_models_page' |
         'designers_page' |
+        'downloaders_page' |
         'brands_page';
         n: number;
       }>
@@ -415,6 +439,11 @@ export const {
   set_brand_models_categories,
   set_brand_models_orderby,
   set_brand_models_order,
+
+  set_downloaders_name,
+  set_downloaders_model_name,
+  set_downloaders_orderby,
+  set_downloaders_order,
 
 } = handle_filters.actions;
 export const reducer = handle_filters.reducer;

@@ -3,40 +3,20 @@
 import React, { CSSProperties, Suspense, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Grid, Box, useMediaQuery, SxProps, List, ListItem, ListItemText, ListItemAvatar, Divider, Skeleton, Input, TextField, FormControl, MenuItem, styled, Menu } from '@mui/material'
-import SimpleCard from '../../simple_card'
 import SimpleTypography from '../../typography'
 import Pagination from '../../pagination/pagination'
-import Categories from '../../views/categories/model_categories'
-import { getAllModels, selectAllModels } from '../../../data/get_all_models';
-import Style from '../../views/styles/model_styles'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { searchModels, setSearchVal } from '../../../data/search_model'
-import { Close } from '@mui/icons-material'
-import Buttons from '../../buttons'
-import Sorts from '../../views/sorts'
-import ModelCrumb from '../../breadcrumbs/model_crumb'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IMAGES_BASE_URL } from '../../../utils/env_vars'
 import EmptyData from '../../views/empty_data'
-import BasicPagination from '../../pagination/pagination'
 import formatDate from '../../../utils/format_date'
-import SimpleInp from '../../inputs/simple_input'
 import SearchInput from '../../inputs/search'
-import SimpleSelect from '../../inputs/simple_select'
-import { selectCategories } from '../../../data/categories'
-import { selectAllBrands } from '../../../data/get_all_brands'
 import { ThemeProps } from '../../../types/theme'
-import instance from '../../../utils/axios'
-import { toast } from 'react-toastify'
-import { getTopModels, selectTopModels } from '../../../data/get_top_models'
-import { setCategoryFilter, setModelBrandFilter, setModelNameFilter, setModelTopFilter, setUserNameFilter } from '../../../data/handle_filters'
-import { ConfirmContextProps, resetConfirmData, resetConfirmProps, setConfirmProps, setConfirmState, setOpenModal } from '../../../data/modal_checker'
-import { setTimeout } from 'timers'
+import { set_downloaders_model_name, set_downloaders_name } from '../../../data/handle_filters'
 import { selectRouteCrubms, setRouteCrumbs } from '../../../data/route_crumbs'
-import { RouteCrumb } from '../../../types/interfaces'
-import { getAllDesigners, selectAllDesigners } from '../../../data/get_all_designers'
 import { selectMyProfile } from '../../../data/me'
+import { getAllDownloads, selectAllDownloads, selectAllDownloads_status } from '../../../data/get_all_downloads'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -100,33 +80,47 @@ const listSx: SxProps = {
   padding: '0',
 }
 
+const imageViewerStyle: CSSProperties = {
+  backgroundColor: '#fff',
+  transition: 'opacity 0.3s ease',
+  zIndex: 3000,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  content: '""',
+  display: 'flex',
+  pointerEvents: 'none',
+  opacity: '0',
+  border: '1px solid #B8B8B8',
+  borderRadius: '4px',
+  width: '320px',
+  height: '320px',
+  position: 'absolute',
+  top: '-160',
+  left: '100%',
+}
+
+const linkStyle: CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+}
 
 const widthControl = {
 
   '&:nth-of-type(1)': {
-    minWidth: '40%',
-    maxWidth: '40%',
+    minWidth: '45%',
+    maxWidth: '45%',
   },
   '&:nth-of-type(2)': {
-    minWidth: '40%',
-    maxWidth: '40%',
+    minWidth: '45%',
+    maxWidth: '45%',
   },
   '&:nth-of-type(3)': {
     minWidth: '10%',
     maxWidth: '10%',
   },
-  // '&:nth-of-type(4)': {
-  //   minWidth: '100px',
-  //   maxWidth: '100px',
-  // },
-  // '&:nth-of-type(5)': {
-  //   minWidth: '100px',
-  //   maxWidth: '100px',
-  // },
-  // '&:nth-of-type(6)': {
-  //   minWidth: '100px',
-  //   maxWidth: '100px',
-  // },
 }
 
 const itemAsLink = {
@@ -153,23 +147,24 @@ const DropDown = styled(Menu)(
   `
 );
 
-export default function UsersPage() {
+export default function DownloadsPage() {
 
   const router = useRouter();
   const dispatch = useDispatch<any>();
 
   const profile = useSelector(selectMyProfile)
 
-  const users_status = useSelector((state: any) => state?.get_all_designers?.status)
-  const getUsersNameFilter = useSelector((state: any) => state?.handle_filters?.users_name)
-  const getUsersOrderBy = useSelector((state: any) => state?.handle_filters?.users_orderby)
-  const getUsersOrder = useSelector((state: any) => state?.handle_filters?.users_order)
+  const downloads_status = useSelector(selectAllDownloads_status)
+  const getUsersNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_name)
+  const getModelNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_model_name)
+  const getUsersOrderBy = useSelector((state: any) => state?.handle_filters?.downloaders_orderby)
+  const getUsersOrder = useSelector((state: any) => state?.handle_filters?.downloaders_order)
 
   const matches = useMediaQuery('(max-width:600px)');
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const users = useSelector(selectAllDesigners)
+  const downloads = useSelector(selectAllDownloads)
   const route_crumbs = useSelector(selectRouteCrubms)
 
   const [activeTopButton, setActiveTopButton] = useState<0 | 1>(0)
@@ -179,13 +174,13 @@ export default function UsersPage() {
   useEffect(() => {
     dispatch(setRouteCrumbs([{
       title: 'Загрузки',
-      route: '/users'
+      route: '/downloads'
     }]))
   }, [])
 
   useMemo(() => {
-    setUsersCount(users?.data?.pagination?.data_count || 0)
-  }, [users, users_status])
+    setUsersCount(downloads?.pagination?.data_count || 0)
+  }, [downloads, downloads_status])
 
   function navigateTo(link: string) {
     router.push(link)
@@ -201,14 +196,26 @@ export default function UsersPage() {
     setAnchorEl(null);
   };
 
-  function handleSearch(searchValue) {
-    dispatch(getAllDesigners({
+  function handleUserSearch(searchValue) {
+    dispatch(getAllDownloads({
       brand_id: profile?.brand?.id,
-      key: searchValue,
+      user_name: searchValue,
+      model_name: getModelNameFilter,
       orderBy: getUsersOrderBy,
       order: getUsersOrder,
     }))
-    dispatch(setUserNameFilter(searchValue))
+    dispatch(set_downloaders_name(searchValue))
+  }
+
+  function handleModelSearch(searchValue) {
+    dispatch(getAllDownloads({
+      brand_id: profile?.brand?.id,
+      user_name: getUsersNameFilter,
+      model_name: searchValue,
+      orderBy: getUsersOrderBy,
+      order: getUsersOrder,
+    }))
+    dispatch(set_downloaders_model_name(searchValue))
   }
 
   return (
@@ -253,72 +260,33 @@ export default function UsersPage() {
             <List
               sx={listSx}
             >
-              {/* <ListItem alignItems="center"
-                key={-3}
-                sx={{
-                  ...liHeaderSx,
-                  padding: '0',
-                  height: '56px'
-                }}
-              >
-                <Buttons
-                  name='Все'
-                  type='button'
-                  sx={{
-                    color: activeTopButton == 0 ? '#7210BE' : '#646464',
-                    borderRadius: 0,
-                    borderBottom: `2px solid ${activeTopButton == 0 ? '#7210BE' : 'transparent'}`,
-                    height: '60px',
-                    paddingX: '24px',
-                    '&:hover': {
-                      background: 'transparent',
-                      color: '#7210BE'
-                    },
-                    '&:hover div': {
-                      backgroundColor: '#F3E5FF'
-                    },
-                    '&:hover div p': {
-                      color: '#7210BE'
-                    }
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: '1px 6px 2px 6px',
-                      backgroundColor: activeTopButton == 0 ? '#F3E5FF' : '#F8F8F8',
-                      borderRadius: '9px',
-                      marginLeft: '6px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'all 0.4s ease',
-                    }}
-                  >
-                    <SimpleTypography
-                      sx={{
-                        color: activeTopButton == 0 ? '#7210BE' : '#A0A0A0',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        lineHeight: '16px',
-                      }}
-                      text={`${usersCount}`}
-                    />
-                  </Box>
-                </Buttons>
-              </ListItem> */}
               <ListItem alignItems="center"
                 key={-2}
                 sx={liHeaderSx}
               >
                 <form style={{ width: '100%' }}>
                   <Grid width={'100%'} container justifyContent={'space-between'}>
-                    <Grid item>
-                      <FormControl>
+                    <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                      <FormControl sx={{ mr: '8px' }}>
                         <SearchInput
-                          placeHolder='Поиск'
+                          placeHolder='Поиск по пользователю'
                           startIcon
                           value={getUsersNameFilter}
-                          search={(s) => handleSearch(s)}
+                          search={(s) => handleUserSearch(s)}
+                          sx={{
+                            borderColor: '#B8B8B8',
+                            padding: '6px 12px',
+                            backgroundColor: '#fff',
+                            width: 'auto'
+                          }}
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <SearchInput
+                          placeHolder='Поиск по модели'
+                          startIcon
+                          value={getModelNameFilter}
+                          search={(s) => handleModelSearch(s)}
                           sx={{
                             borderColor: '#B8B8B8',
                             padding: '6px 12px',
@@ -348,39 +316,29 @@ export default function UsersPage() {
                   text='Дата'
                   sx={{ ...liHeaderTextSx, ...widthControl }}
                 />
-                {/* <SimpleTypography
-                  text='Интерьеры'
-                  sx={{ ...liHeaderTextSx, ...widthControl, textAlign: 'center' }}
-                />
-                <SimpleTypography
-                  text='Бирки'
-                  sx={{ ...liHeaderTextSx, ...widthControl, textAlign: 'center' }}
-                />
-                <SimpleTypography
-                  text='Загрузки'
-                  sx={{ ...liHeaderTextSx, ...widthControl, textAlign: 'center' }}
-                /> */}
               </ListItem>
               {
-                users_status == 'succeeded' ?
-                  users && users?.length != 0
-                    ? users?.map((user, index: any) =>
+                downloads_status == 'succeeded' ?
+                  downloads && downloads?.downloads?.length != 0
+                    ? downloads?.downloads?.map((download, index: any) =>
 
                       <ListItem key={index} alignItems="center"
                         sx={liSx}
                       >
 
-                        <ListItemText onClick={() => navigateTo(`/users/${user?.username}`)}
-                          // title='Нажмите, чтобы открыть'
+                        <ListItemText
                           sx={{
                             ...widthControl, ...itemAsLink,
+                            position: 'relative',
                             '& > span:first-of-type': {
+                              width: '100%',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'flex-start'
                             }
                           }}
                         >
+                          <Link style={linkStyle} href={`/users/${download?.user?.username}`} />
                           <Box
                             sx={{
                               ...modelImageWrapperSx,
@@ -388,28 +346,13 @@ export default function UsersPage() {
                                 opacity: '1'
                               },
                               '&::after': {
-                                backgroundImage: user?.image_src ? `url(${IMAGES_BASE_URL}/${user?.image_src})` : `url('/img/avatar.png')`,
-                                bgcolor: '#fff',
-                                transition: 'opacity 0.3s ease',
-                                zIndex: 3000,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundSize: 'cover',
-                                content: '""',
-                                display: 'flex',
-                                pointerEvents: 'none',
-                                opacity: '0',
-                                border: '1px solid #B8B8B8',
-                                borderRadius: '4px',
-                                width: '320px',
-                                height: '320px',
-                                position: 'absolute',
-                                top: '-160',
-                                left: '100%',
+                                backgroundImage: download?.user?.image_src ? `url(${IMAGES_BASE_URL}/${download?.user?.image_src})` : `url('/img/avatar.png')`,
+                                ...imageViewerStyle
                               }
                             }}
                           >
                             <Image
-                              src={user?.image_src ? `${IMAGES_BASE_URL}/${user?.image_src}` : `/img/avatar.png`}
+                              src={download?.user?.image_src ? `${IMAGES_BASE_URL}/${download?.user?.image_src}` : `/img/avatar.png`}
                               alt='image'
                               width={36}
                               height={36}
@@ -418,9 +361,10 @@ export default function UsersPage() {
                           </Box>
 
 
-                          <ListItemText onClick={() => navigateTo(`/users/${user?.username}`)} className='brand_name' sx={{ marginLeft: '24px', }} >
+                          <ListItemText className='brand_name' sx={{ marginLeft: '24px', }} >
                             <SimpleTypography
-                              text={user.full_name}
+                              className='ellipsis__title'
+                              text={download?.user.full_name}
                               sx={{
                                 fontSize: '16px',
                                 fontWeight: 400,
@@ -431,7 +375,8 @@ export default function UsersPage() {
                               }}
                             />
                             <SimpleTypography
-                              text={`@${user?.username}`}
+                              className='ellipsis__title'
+                              text={`@${download?.user?.username}`}
                               sx={{
                                 fontSize: '12px',
                                 fontWeight: 400,
@@ -444,16 +389,19 @@ export default function UsersPage() {
                           </ListItemText>
                         </ListItemText>
 
-                        <ListItemText onClick={() => navigateTo(`/models/${user?.model_slug}`)}
+                        <ListItemText
                           sx={{
                             ...widthControl, ...itemAsLink,
+                            position: 'relative',
                             '& > span:first-of-type': {
+                              width: '100%',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'flex-start'
                             }
                           }}
                         >
+                          <Link style={linkStyle} href={`/models/${download?.model?.slug}`} />
                           <Box
                             sx={{
                               ...modelImageWrapperSx,
@@ -461,28 +409,13 @@ export default function UsersPage() {
                                 opacity: '1'
                               },
                               '&::after': {
-                                backgroundImage: user?.model_cover ? `url(${IMAGES_BASE_URL}/${user?.model_cover})` : `url(/img/cube.jpg)`,
-                                bgcolor: '#fff',
-                                transition: 'opacity 0.3s ease',
-                                zIndex: 3000,
-                                backgroundRepeat: 'no-repeat',
-                                backgroundSize: 'cover',
-                                content: '""',
-                                display: 'flex',
-                                pointerEvents: 'none',
-                                opacity: '0',
-                                border: '1px solid #B8B8B8',
-                                borderRadius: '4px',
-                                width: '320px',
-                                height: '320px',
-                                position: 'absolute',
-                                top: '-160',
-                                left: '100%',
+                                backgroundImage: download?.model?.cover ? `url(${IMAGES_BASE_URL}/${download?.model?.cover})` : `url(/img/cube.jpg)`,
+                                ...imageViewerStyle
                               }
                             }}
                           >
                             <Image
-                              src={user?.model_cover ? `${IMAGES_BASE_URL}/${user?.model_cover}` : `/img/cube.jpg`}
+                              src={download?.model?.cover ? `${IMAGES_BASE_URL}/${download?.model?.cover}` : `/img/cube.jpg`}
                               alt='image'
                               width={36}
                               height={36}
@@ -491,9 +424,10 @@ export default function UsersPage() {
                           </Box>
 
 
-                          <ListItemText onClick={() => navigateTo(`/models/${user?.model_slug}`)} className='brand_name' sx={{ marginLeft: '24px', }} >
+                          <ListItemText className='brand_name' sx={{ marginLeft: '24px', }} >
                             <SimpleTypography
-                              text={user.model_name}
+                              className='ellipsis__title'
+                              text={download?.model?.name}
                               sx={{
                                 fontSize: '16px',
                                 fontWeight: 400,
@@ -504,7 +438,8 @@ export default function UsersPage() {
                               }}
                             />
                             <SimpleTypography
-                              text={`#${user?.model_id}`}
+                              className='ellipsis__title'
+                              text={`${download?.model?.brand?.name}`}
                               sx={{
                                 fontSize: '12px',
                                 fontWeight: 400,
@@ -517,12 +452,11 @@ export default function UsersPage() {
                           </ListItemText>
                         </ListItemText>
 
-                        <ListItemText title='Нажмите, чтобы открыть'
-                          onClick={() => navigateTo(`/models/${user?.username}`)}
+                        <ListItemText
                           sx={{ ...widthControl, ...itemAsLink }}
                         >
                           <SimpleTypography
-                            text={formatDate(user?.downloaded_at, true)}
+                            text={formatDate(download?.created_at, true)}
                             sx={{
                               fontSize: '14px',
                               fontWeight: 400,
@@ -532,51 +466,6 @@ export default function UsersPage() {
                             }}
                           />
                         </ListItemText>
-
-                        {/* <ListItemText
-                          sx={{ ...widthControl }}
-                        >
-                          <SimpleTypography
-                            text={user?.designs_count || 0}
-                            sx={{
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '26px',
-                              letterSpacing: '-0.02em',
-                              textAlign: 'center',
-                            }}
-                          />
-                        </ListItemText>
-
-                        <ListItemText
-                          sx={{ ...widthControl }}
-                        >
-                          <SimpleTypography
-                            text={user?.tags_count || 0}
-                            sx={{
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '26px',
-                              letterSpacing: '-0.02em',
-                              textAlign: 'center',
-                            }}
-                          />
-                        </ListItemText>
-
-                        <ListItemText
-                          sx={{ ...widthControl }}
-                        >
-                          <SimpleTypography
-                            text={user?.downloads_count || 0}
-                            sx={{
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '26px',
-                              letterSpacing: '-0.02em',
-                              textAlign: 'center',
-                            }}
-                          />
-                        </ListItemText> */}
 
                       </ListItem>
 
@@ -669,9 +558,10 @@ export default function UsersPage() {
               sx={{ padding: "0 !important", display: "flex", justifyContent: "center" }}
             >
               <Pagination
-                dataSource='designers'
-                count={users?.data?.pagination?.pages}
-                page={parseInt(users?.data?.pagination?.current) + 1}
+                dataSource='downloads'
+                dataId={profile?.brand?.id}
+                count={downloads?.pagination?.pages}
+                page={parseInt(downloads?.pagination?.current) + 1}
               />
             </Grid>
           </Grid>
