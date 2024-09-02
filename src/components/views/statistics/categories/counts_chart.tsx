@@ -58,7 +58,7 @@ export default function CategoriesCountsChartComponent() {
       });
 
       if (remaining.length > 0) {
-        const sumCount = remaining.reduce((a, c) => a + c.downloads_count, 0);
+        const sumCount = remaining.reduce((a, c) => Number(a) + Number(c.downloads_count), 0);
         arr.push({ name: 'Другие', count: sumCount, barColor: colors[4] });
       }
 
