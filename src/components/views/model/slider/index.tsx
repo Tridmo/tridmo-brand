@@ -74,7 +74,7 @@ const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
   const model = useSelector(selectOneModel);
   const currentUser = useSelector(selectMyProfile);
   const isAuthenticated = useSelector((state: any) => state?.auth_slicer?.authState)
-  const simple_model_status = useSelector((state: any) => state?.get_one_model?.status);
+  const status = useSelector((state: any) => state?.get_one_model?.status);
 
   const matches = useMediaQuery('(max-width:600px)');
   const [sliderCount, setSliderCount] = React.useState(0)
@@ -107,7 +107,7 @@ const SimpleSlider = ({ name, sx }: { name?: string, sx?: SxProps }) => {
     opacity: sliderBtnHover
   }
 
-  if ("succeeded") {
+  if (status == "succeeded") {
     return (
       <Grid
         sx={

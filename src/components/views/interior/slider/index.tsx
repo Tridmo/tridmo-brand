@@ -23,7 +23,7 @@ const SimpleSlider = ({ mainWidth }: { mainWidth: number }) => {
   const [sliderBtnHover, setSliderBtnHover] = useState(0)
   const dispatch = useDispatch<any>()
   const interior = useSelector(selectOneInterior);
-  const simple_model_status = useSelector((state: any) => state?.get_one_model?.status);
+  const status = useSelector((state: any) => state?.get_one_interior?.status);
   const selectedSlide = useSelector((state: any) => state?.loader?.selected_interior_image);
   const matches = useMediaQuery('(max-width:600px)');
 
@@ -91,7 +91,7 @@ const SimpleSlider = ({ mainWidth }: { mainWidth: number }) => {
     `
   )
 
-  if ("succeeded") {
+  if (status == "succeeded") {
     return (
       <>
         <Grid

@@ -198,7 +198,7 @@ export default function OneInterior() {
                         </Box>
                       </Link>
                       {
-                        'interior?.author?.id == currentUser?.id'
+                        interior?.author?.id == currentUser?.id
                           ? <Box
                             sx={{
                               display: 'flex',
