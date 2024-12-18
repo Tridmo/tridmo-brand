@@ -17,6 +17,13 @@ import { set_downloaders_model_name, set_downloaders_name } from '../../../data/
 import { selectRouteCrubms, setRouteCrumbs } from '../../../data/route_crumbs'
 import { selectMyProfile } from '../../../data/me'
 import { getAllDownloads, selectAllDownloads, selectAllDownloads_status } from '../../../data/get_all_downloads'
+import { chatApi } from '../../../utils/axios'
+import { setChatToken } from '../../../utils/axios'
+import Cookies from 'js-cookie'
+import { setSelectedConversation } from '../../../data/chat'
+import { selectChatToken } from '../../../data/get_chat_token'
+import Buttons from '../../buttons'
+import { SmsOutlined } from '@mui/icons-material'
 
 const fake = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -110,14 +117,18 @@ const linkStyle: CSSProperties = {
 const widthControl = {
 
   '&:nth-of-type(1)': {
-    minWidth: '45%',
-    maxWidth: '45%',
+    minWidth: '40%',
+    maxWidth: '40%',
   },
   '&:nth-of-type(2)': {
-    minWidth: '45%',
-    maxWidth: '45%',
+    minWidth: '40%',
+    maxWidth: '40%',
   },
   '&:nth-of-type(3)': {
+    minWidth: '10%',
+    maxWidth: '10%',
+  },
+  '&:nth-of-type(4)': {
     minWidth: '10%',
     maxWidth: '10%',
   },
@@ -159,6 +170,8 @@ export default function DownloadsPage() {
   const getModelNameFilter = useSelector((state: any) => state?.handle_filters?.downloaders_model_name)
   const getUsersOrderBy = useSelector((state: any) => state?.handle_filters?.downloaders_orderby)
   const getUsersOrder = useSelector((state: any) => state?.handle_filters?.downloaders_order)
+
+  const chatToken = useSelector(selectChatToken)
 
   const matches = useMediaQuery('(max-width:600px)');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -216,6 +229,19 @@ export default function DownloadsPage() {
       order: getUsersOrder,
     }))
     dispatch(set_downloaders_model_name(searchValue))
+  }
+
+  async function handleCreateConversation(user) {
+
+    setChatToken(Cookies.get('chatToken') || chatToken)
+
+    chatApi.post(`/conversations`, {
+      members: [user?.id]
+    })
+      .then(res => {
+        dispatch(setSelectedConversation(res?.data?.id))
+        router.push('/chat')
+      })
   }
 
   return (
@@ -314,6 +340,10 @@ export default function DownloadsPage() {
                 />
                 <SimpleTypography
                   text='Дата'
+                  sx={{ ...liHeaderTextSx, ...widthControl }}
+                />
+                <SimpleTypography
+                  text='Написать'
                   sx={{ ...liHeaderTextSx, ...widthControl }}
                 />
               </ListItem>
@@ -467,6 +497,20 @@ export default function DownloadsPage() {
                           />
                         </ListItemText>
 
+                        <ListItemText
+                          sx={{ ...widthControl }}
+                        >
+                          <Buttons
+                            onClick={() => handleCreateConversation(download?.user)}
+                            sx={{ padding: '10px !important' }}
+                            className='bookmark__btn'
+                            name="Написать"
+                            childrenFirst={true}
+                          >
+                            <SmsOutlined sx={{ width: '20px', height: '20px', mr: '8px' }} />
+                          </Buttons>
+                        </ListItemText>
+
                       </ListItem>
 
                     )
@@ -541,6 +585,14 @@ export default function DownloadsPage() {
                                 variant="rectangular"
                                 width={56}
                                 height={20}
+                              />
+                            </ListItemText>
+
+                            <ListItemText sx={{ ...widthControl }}>
+                              <Skeleton
+                                variant="rectangular"
+                                width={56}
+                                height={30}
                               />
                             </ListItemText>
                           </ListItem>
