@@ -1,1 +1,1 @@
-# demod_brandadmin
+# Tridmo Dashboard for Brands
